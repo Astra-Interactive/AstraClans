@@ -1,0 +1,15 @@
+main: com.astrainteractive.astraclans.AstraClans
+prefix: AstraClans
+description: '${description}'
+name: '${name}'
+version: '${version}'
+authors: [ MakeevRoman ]
+author: MakeevRoman
+website: AstraInteractive.ru
+api-version: 1.18
+softdepend: [ ]
+depend: [ ]
+loadbefore: [ ]
+commands:
+  aclan:
+  aclanreload:
