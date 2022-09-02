@@ -2,6 +2,7 @@ package com.astrainteractive.astraclans.domain.api
 
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.dto.*
+import com.astrainteractive.astraclans.domain.getFlagOrNull
 import com.astrainteractive.astraclans.domain.isSame
 
 object AstraClansAPI {
@@ -46,7 +47,7 @@ object AstraClansAPI {
      */
     fun isFlagEnabled(chunk: LandDTO, flag: FlagsEnum): Boolean? {
         val chunkClan = getChunkClan(chunk) ?: return null
-        val clanFlag = chunkClan.getFlag(flag) ?: return true
+        val clanFlag = chunkClan.getFlagOrNull(flag) ?: return true
         val isEnabled = clanFlag.enabled
         return isEnabled
     }
@@ -65,9 +66,9 @@ object AstraClansAPI {
 }
 
 fun AstraClansAPI.canBreak(player: ClanMemberDTO, chunk: LandDTO): Boolean? {
-    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_BREAK)
+    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_BREAK_DENY)
 }
 
 fun AstraClansAPI.canPlace(player: ClanMemberDTO, chunk: LandDTO): Boolean? {
-    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_PLACE)
+    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_PLACE_DENY)
 }

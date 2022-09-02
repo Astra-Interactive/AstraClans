@@ -1,7 +1,6 @@
 package com.astrainteractive.astraclans.domain.api.use_cases
 
-import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.ClanJoinResponse
+import com.astrainteractive.astraclans.domain.api.response.ClanJoinResponse
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.datasource.PendingInviteDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO

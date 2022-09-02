@@ -1,7 +1,7 @@
 package com.astrainteractive.astraclans.domain.api.use_cases
 
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.SetClanFlagsResponse
+import com.astrainteractive.astraclans.domain.api.response.SetClanFlagsResponse
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.FlagDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO

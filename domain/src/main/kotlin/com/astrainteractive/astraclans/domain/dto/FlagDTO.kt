@@ -8,4 +8,4 @@ data class FlagDTO(
     val flag: FlagsEnum,
     var enabled: Boolean
 )
-fun ClanDTO.getFlag(flag: FlagsEnum) = flags.firstOrNull { it.flag == flag }
+

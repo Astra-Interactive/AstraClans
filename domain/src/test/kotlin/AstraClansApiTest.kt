@@ -1,7 +1,7 @@
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.ClaimChunkResponse
-import com.astrainteractive.astraclans.domain.api.ClanCreateResponse
+import com.astrainteractive.astraclans.domain.api.response.ClaimChunkResponse
+import com.astrainteractive.astraclans.domain.api.response.ClanCreateResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import kotlinx.coroutines.runBlocking
