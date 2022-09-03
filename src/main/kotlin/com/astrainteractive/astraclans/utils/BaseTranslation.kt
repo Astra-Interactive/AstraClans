@@ -40,6 +40,11 @@ abstract class BaseTranslation {
         return getHEXString(path = path, default = default)
     }
 
+    fun translationDetails(path: String, default: String) = translationDetails {
+        this.path = path
+        this.default = default
+    }
+
     init {
         onCreate()
     }

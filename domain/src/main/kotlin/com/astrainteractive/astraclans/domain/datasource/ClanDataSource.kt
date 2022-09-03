@@ -48,11 +48,15 @@ object ClanDataSource {
         return result
     }
 
-    fun select(clanDTO: ClanDTO): ClanDTO {
+    fun selectByID(id: Int): ClanDTO? {
         val result = transaction {
-            ClanDAO.findById(clanDTO.id)?.map()
-        } ?: clanDTO
+            ClanDAO.findById(id)?.map()
+        }
         return result
+    }
+
+    fun select(clanDTO: ClanDTO): ClanDTO {
+        return selectByID(clanDTO.id) ?: clanDTO
     }
 
     fun select(leaderUUID: String): ClanDTO? {

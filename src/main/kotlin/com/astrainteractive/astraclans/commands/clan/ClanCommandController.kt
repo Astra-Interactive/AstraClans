@@ -142,10 +142,10 @@ object ClanCommandController {
     }
 
     // aclan setflag <flag> [value]
-    suspend fun setFlag(player: Player, flag: FlagsEnum?, value: Boolean) {
+    suspend fun setFlag(player: Player, flag: FlagsEnum?, value: Boolean): SetClanFlagsResponse? {
         flag ?: run {
             player.sendTranslationMessage { noFlagProvided }
-            return
+            return null
         }
 
         val result = SetClanFlagUseCase.Params(player.toDTO(), flag.toDTO(value)).run {
@@ -161,5 +161,6 @@ object ClanCommandController {
 
             null -> player.sendTranslationMessage { databaseError }
         }
+        return result
     }
 }

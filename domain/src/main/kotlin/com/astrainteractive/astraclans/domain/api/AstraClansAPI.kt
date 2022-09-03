@@ -21,6 +21,9 @@ object AstraClansAPI {
     suspend fun onLandChanged(_clanDTO: ClanDTO) {
         _clansMap[_clanDTO.id] = ClanDataSource.select(_clanDTO)
     }
+    suspend fun onMemberChanged(_clanDTO: ClanDTO){
+        _clansMap[_clanDTO.id] = ClanDataSource.select(_clanDTO)
+    }
 
     suspend fun onFlagChanged(_clanDTO: ClanDTO) {
         _clansMap[_clanDTO.id] = ClanDataSource.select(_clanDTO)
@@ -67,12 +70,4 @@ object AstraClansAPI {
         return flagEnabled
     }
 
-}
-
-fun AstraClansAPI.canBreak(player: ClanMemberDTO, chunk: LandDTO): Boolean? {
-    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_BREAK_DENY)?.not()
-}
-
-fun AstraClansAPI.canPlace(player: ClanMemberDTO, chunk: LandDTO): Boolean? {
-    return isFlagEnabledForPlayer(player, chunk, FlagsEnum.BLOCK_PLACE_DENY)
 }

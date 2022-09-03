@@ -2,12 +2,15 @@ package com.astrainteractive.astraclans.gui.flags
 
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
+import com.astrainteractive.astraclans.domain.api.response.SetClanFlagsResponse
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
+import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
 import com.astrainteractive.astralibs.utils.uuid
+import kotlinx.coroutines.launch
 
 
 class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtility, private val view: IFlagView) {
@@ -39,8 +42,13 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
         val flag = _flagList.values.elementAtOrNull(i)?.let {
             it.copy(enabled = !it.enabled)
         } ?: return
-//        _flagList[flag.flag] = ClanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled) ?: flag
-        view.showFlags(flagList)
+        AsyncHelper.launch {
+            val result = ClanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled)
+            if (result !is SetClanFlagsResponse.Success) return@launch
+            _flagList[flag.flag] = result.result
+
+            AsyncHelper.callSyncMethod { view.showFlags(flagList) }
+        }
     }
 
 }

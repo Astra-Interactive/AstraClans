@@ -2,6 +2,7 @@ package com.astrainteractive.astraclans.gui.flags
 
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.utils.Translation
+import com.astrainteractive.astraclans.utils.toItemStack
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.events.EventManager
 import com.astrainteractive.astralibs.menu.AstraMenuSize
@@ -58,9 +59,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
         flags.forEachIndexed { i, flag ->
             val index = getIndex(i)
             if (index > flags.size) return@forEachIndexed
-            inventory.setItem(i, ItemStack(Material.DIAMOND).apply {
-                setDisplayName("${flag.flag.name}: ${flag.enabled}")
-            })
+            inventory.setItem(i, flag.flag.toItemStack(flag.enabled))
         }
     }
 

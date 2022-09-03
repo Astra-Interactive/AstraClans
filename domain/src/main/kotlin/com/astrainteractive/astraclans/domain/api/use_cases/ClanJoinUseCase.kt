@@ -1,5 +1,6 @@
 package com.astrainteractive.astraclans.domain.api.use_cases
 
+import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.response.ClanJoinResponse
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
@@ -22,7 +23,7 @@ object ClanJoinUseCase : UseCase<ClanJoinResponse, ClanJoinUseCase.Params>() {
             ?: return ClanJoinResponse.NotInvited
         PendingInviteDataSource.removeAll(memberDTO.minecraftUUID)
         val result = ClanMemberDataSource.insert(clanDTO, memberDTO) ?: return ClanJoinResponse.ErrorInDatabase
-
+        AstraClansAPI.onMemberChanged(clanDTO)
         return ClanJoinResponse.Success(result)
     }
 }
