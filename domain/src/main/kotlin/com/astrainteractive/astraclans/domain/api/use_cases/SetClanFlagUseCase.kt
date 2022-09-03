@@ -13,8 +13,8 @@ object SetClanFlagUseCase : UseCase<SetClanFlagsResponse, SetClanFlagUseCase.Par
     override suspend fun run(params: Params): SetClanFlagsResponse? {
         val clanLeaderDTO = params.memberDTO
         val clanDTO = ClanDataSource.select(clanLeaderDTO.minecraftUUID)
-        val flagDTO = params.flagDTO
         if (clanDTO == null || clanLeaderDTO.minecraftUUID != clanDTO.leaderUUID) return SetClanFlagsResponse.NotLeader
+        val flagDTO = params.flagDTO.copy(clanID = clanDTO.id)
         val result = FlagDataSource.updateOrInsert(flagDTO) ?: return SetClanFlagsResponse.ErrorInDatabase
         AstraClansAPI.onFlagChanged(clanDTO)
         return SetClanFlagsResponse.Success(result)

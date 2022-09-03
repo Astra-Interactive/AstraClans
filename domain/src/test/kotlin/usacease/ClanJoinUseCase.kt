@@ -30,26 +30,26 @@ class ClanJoinUseCase {
             minecraftUUID = clanDTO.leaderUUID
         )
 
-        ClanJoinUseCase.Params(clanDTO, clanLeaderMemberDTO).also {
+        ClanJoinUseCase.Params(clanDTO.clanTag, clanLeaderMemberDTO).also {
             val result = runBlocking { ClanJoinUseCase(it) }
             assert(result is ClanJoinResponse.AlreadyInClan)
         }
 
-        ClanJoinUseCase.Params(clanDTO, clanMemberDTO).also {
+        ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
             val result = runBlocking { ClanJoinUseCase(it) }
             assert(result is ClanJoinResponse.NotInvited)
         }
 
         // Invite player
-        InvitePlayerUseCase.Params(clanDTO, clanMemberDTO).also {
+        InvitePlayerUseCase.Params(clanLeaderMemberDTO, clanMemberDTO).also {
             runBlocking { InvitePlayerUseCase(it) }
         }
-        ClanJoinUseCase.Params(clanDTO, clanMemberDTO).also {
+        ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
             val result = runBlocking { ClanJoinUseCase(it) }
             assert(result is ClanJoinResponse.Success)
         }
 
-        ClanJoinUseCase.Params(clanDTO, clanMemberDTO).also {
+        ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
             val result = runBlocking { ClanJoinUseCase(it) }
             assert(result is ClanJoinResponse.NotInvited || result is ClanJoinResponse.AlreadyInClan)
         }

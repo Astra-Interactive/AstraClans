@@ -34,14 +34,14 @@ class ClanLandEvent {
         }
     }
     val blockPlaceEvent = DSLEvent.event(BlockPlaceEvent::class.java) {
-        if (it is BlockMultiPlaceEvent) return@event
-        val key = BlockRetractKey(it.block.location, it.player.uuid)
-        blockDebounce.getOrNull(key, it) {
-            val player = it.player
-            val chunk = it.block.chunk
-            val canBreak = AstraClansAPI.canPlace(player.toDTO(), chunk.toDTO())?.not()
-            canBreak
-        }
+//        if (it is BlockMultiPlaceEvent) return@event
+//        val key = BlockRetractKey(it.block.location, it.player.uuid)
+//        blockDebounce.getOrNull(key, it) {
+//            val player = it.player
+//            val chunk = it.block.chunk
+//            val canBreak = AstraClansAPI.canPlace(player.toDTO(), chunk.toDTO())?.not()
+//            canBreak
+//        }
     }
     val onBlockMultiPlace = DSLEvent.event(BlockMultiPlaceEvent::class.java) {
     }

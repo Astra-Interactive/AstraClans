@@ -13,10 +13,10 @@ object ClaimChunkUseCase : UseCase<ClaimChunkResponse, ClaimChunkUseCase.Params>
     override suspend fun run(params: Params): ClaimChunkResponse? {
         val memberDTO = params.memberDTO
         val clanDTO = ClanDataSource.select(memberDTO.minecraftUUID)
-        val landDTO = params.landDTO
         if (clanDTO == null || clanDTO.leaderUUID != memberDTO.minecraftUUID) return ClaimChunkResponse.NotLeader
         // TODO check on near self
         // TODO check on near other lands
+        val landDTO = params.landDTO.copy(clanID = clanDTO.id)
         LandDataSource.select(landDTO.worldName, landDTO.x, landDTO.z)?.let {
             return ClaimChunkResponse.AlreadyClaimed
         }

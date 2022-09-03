@@ -27,12 +27,12 @@ class InvitePlayerUseCase {
             minecraftName = clanDTO.leaderName,
             minecraftUUID = clanDTO.leaderUUID
         )
-        InvitePlayerUseCase.Params(clanDTO, clanLeaderMemberDTO).also {
+        InvitePlayerUseCase.Params(clanLeaderMemberDTO, clanLeaderMemberDTO).also {
             val result = runBlocking { InvitePlayerUseCase(it) }
             assert(result is InvitePlayerResponse.AlreadyInClan)
         }
 
-        InvitePlayerUseCase.Params(clanDTO, clanMemberDTO).also {
+        InvitePlayerUseCase.Params(clanLeaderMemberDTO, clanMemberDTO).also {
             runBlocking { InvitePlayerUseCase(it) }.also { result ->
                 assert(result is InvitePlayerResponse.Success)
             }

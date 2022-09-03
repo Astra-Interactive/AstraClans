@@ -51,6 +51,31 @@ class PluginTranslation(
         path = "general.not_a_player"
         default = "Вы не игрок"
     }
+    val playerNotOnline = translationDetails {
+        path = "general.player_not_online"
+        default = "Игрок не в сети"
+    }
+    val playerAlreadyInvited = translationDetails {
+        path = "general.player_already_invited"
+        default = "Игрок уже приглашен"
+    }
+    val youNotInvited = translationDetails {
+        path = "general.not_invited"
+        default = "Вы не приглашены"
+    }
+    val joinedClan = translationDetails {
+        path = "general.joined_clan"
+        default = "Вы вступили в клан %clan%"
+    }
+
+    val playerInvited = translationDetails {
+        path = "general.player_invited"
+        default = "Игрок %player% приглашен в клан"
+    }
+    val clanNotFound = translationDetails {
+        path = "general.clan_not_found"
+        default = "Клан %clan% не найден"
+    }
 
     //Menu
     val menuTitle: String = getHEXString("menu.title", "#18dbd1Меню")
@@ -93,6 +118,18 @@ class PluginTranslation(
         path = "clan.not_clan_member"
         default = "Вы не состоите в клане"
     }
+    val successDisband = translationDetails {
+        path = "clan.disband_success"
+        default = "Клан успешно распущен"
+    }
+    val successLeave = translationDetails {
+        path = "clan.leave_success"
+        default = "Вы покинули клан"
+    }
+    val leaderCantLeaveClan = translationDetails {
+        path = "clan.leader_cant_leave"
+        default = "Лидер не может покинуть клан"
+    }
     val successClanCreate = translationDetails {
         path = "clan.create_clan_success"
         default = "Клан %tag% успешно создан"
@@ -100,6 +137,11 @@ class PluginTranslation(
     val youAreNotLeader = translationDetails {
         path = "clan.you_are_not_leader"
         default = "Вы не лидер клана"
+    }
+
+    val flagChanged = translationDetails {
+        path = "clan.flag_changed"
+        default = "Flag %flah% chaned to %value%"
     }
     val chunkAlreadyClaimed = translationDetails {
         path = "clan.chunk_already_claimed"

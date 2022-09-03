@@ -41,6 +41,13 @@ object ClanDataSource {
         return result
     }
 
+    fun selectByTag(tag: String): ClanDTO? {
+        val result = transaction {
+            ClanDAO.find(Clan.clanTAG eq tag).firstOrNull()?.map()
+        }
+        return result
+    }
+
     fun select(clanDTO: ClanDTO): ClanDTO {
         val result = transaction {
             ClanDAO.findById(clanDTO.id)?.map()

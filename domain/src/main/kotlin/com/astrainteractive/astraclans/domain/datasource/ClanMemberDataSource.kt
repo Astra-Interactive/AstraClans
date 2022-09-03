@@ -18,6 +18,22 @@ object ClanMemberDataSource {
         return result
     }
 
+    fun deleteFromClan(clanDTO: ClanDTO) {
+        val result = transaction {
+            ClanMemberDAO.find(ClanMember.clanID eq clanDTO.id).forEach {
+                it.delete()
+            }
+        }
+        return result
+    }
+
+    fun delete(memberDTO: ClanMemberDTO): Unit? {
+        val result = transaction {
+            ClanMemberDAO.findById(memberDTO.id)?.delete()
+        }
+        return result
+    }
+
     fun insert(clanDTO: ClanDTO, clanMemberDTO: ClanMemberDTO): ClanMemberDTO {
         val result = transaction {
             ClanMemberDAO.new {

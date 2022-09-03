@@ -6,5 +6,6 @@ sealed class InvitePlayerResponse : ApiResponse<PendingInviteDTO> {
     object AlreadyInvited : InvitePlayerResponse()
     object ErrorInDatabase : InvitePlayerResponse()
     object AlreadyInClan : InvitePlayerResponse()
+    object NotLeader : InvitePlayerResponse()
     class Success(val result: PendingInviteDTO) : InvitePlayerResponse()
 }

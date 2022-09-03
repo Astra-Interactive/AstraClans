@@ -11,6 +11,9 @@ object Clan : IntIdTable() {
     val leaderUUID: Column<String> = text("minecraft_uuid")
     val clanName: Column<String> = text("clan_name")
     val clanTAG: Column<String> = text("clan_tag")
+    init {
+        uniqueIndex(leaderName, leaderUUID)
+    }
 }
 
 class ClanDAO(id: EntityID<Int>) : IntEntity(id) {

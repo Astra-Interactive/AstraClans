@@ -1,4 +1,5 @@
 import com.astrainteractive.astraclans.commands.*
+import com.astrainteractive.astraclans.commands.clan.ClanCommand
 
 
 /**
@@ -17,7 +18,7 @@ class CommandManager {
     init {
         tabCompleter()
         reload()
-        clanCommand()
+        ClanCommand()
     }
 
 
