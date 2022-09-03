@@ -10,6 +10,9 @@ object AstraClansAPI {
     val clansMap: Map<Int, ClanDTO>
         get() = _clansMap
 
+    var playerStatusProvider: IPlayerStatusProvider? = null
+
+
     fun rememberClan(clanDTO: ClanDTO) {
         _clansMap[clanDTO.id] = clanDTO
     }
@@ -21,7 +24,8 @@ object AstraClansAPI {
     suspend fun onLandChanged(_clanDTO: ClanDTO) {
         _clansMap[_clanDTO.id] = ClanDataSource.select(_clanDTO)
     }
-    suspend fun onMemberChanged(_clanDTO: ClanDTO){
+
+    suspend fun onMemberChanged(_clanDTO: ClanDTO) {
         _clansMap[_clanDTO.id] = ClanDataSource.select(_clanDTO)
     }
 
@@ -67,7 +71,8 @@ object AstraClansAPI {
         val playerClan = getPlayerClan(player)
         val chunkClan = getChunkClan(chunk) ?: return null
         if (playerClan?.id == chunkClan.id) return null
-        return flagEnabled
+        val anyMemberOnline = playerStatusProvider?.isAnyMemberOnline(chunkClan)
+        return anyMemberOnline?.not()?.and(flagEnabled) ?: flagEnabled
     }
 
 }

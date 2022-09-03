@@ -3,7 +3,10 @@ package com.astrainteractive.astraclans
 import CommandManager
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
+import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
+import com.astrainteractive.astraclans.domain.dto.ClanDTO
+import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.Logger
 import com.astrainteractive.astralibs.ServerVersion
@@ -23,6 +26,7 @@ import org.bukkit.Chunk
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.util.*
 
 /**
  * Initial class for your plugin
@@ -79,6 +83,24 @@ class AstraClans : JavaPlugin() {
         }
         AsyncHelper.launch {
             ClanDataSource.selectAll().forEach(AstraClansAPI::rememberClan)
+        }
+        AstraClansAPI.playerStatusProvider = object : IPlayerStatusProvider {
+            override fun isPlayerOnline(playerDTO: ClanMemberDTO): Boolean {
+                return Bukkit.getPlayer(UUID.fromString(playerDTO.minecraftUUID))?.isOnline == true
+            }
+
+            override fun isAnyMemberOnline(clanDTO: ClanDTO): Boolean {
+                val isMemberOnline = clanDTO.clanMember.any(::isPlayerOnline)
+                val isLeaderOnline = isPlayerOnline(
+                    ClanMemberDTO(
+                        clanID = clanDTO.id,
+                        minecraftUUID = clanDTO.leaderUUID,
+                        minecraftName = clanDTO.leaderName
+                    )
+                )
+                return isMemberOnline || isLeaderOnline
+            }
+
         }
     }
 
