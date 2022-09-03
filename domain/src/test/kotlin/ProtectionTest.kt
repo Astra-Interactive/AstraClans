@@ -6,6 +6,7 @@ import com.astrainteractive.astraclans.domain.api.response.SetClanFlagsResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.SetClanFlagUseCase
+import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
@@ -59,23 +60,35 @@ class ProtectionTest {
     @Test
     fun isFlanEnabledForPlayer() {
         val flag = FlagsEnum.BLOCK_BREAK_DENY
-        var flagDTO = FlagDTO(clanID = clanDTO.id, flag = flag, enabled = false)
+        var blockBreakDTO = FlagDTO(clanID = clanDTO.id, flag = flag, enabled = false)
         // Free land
         assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, freeLandDTO, flag) == null)
         assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, freeLandDTO, flag) == null)
         assert(AstraClansAPI.isFlagEnabledForPlayer(clanLeaderDTO, freeLandDTO, flag) == null)
         assert(AstraClansAPI.isFlagEnabledForPlayer(clanLeaderDTO, freeLandDTO, flag) == null)
         // Clan leader on clan land
-        flagDTO = updateFlag(true, flagDTO)
+        blockBreakDTO = updateFlag(true, blockBreakDTO)
         assert(AstraClansAPI.isFlagEnabledForPlayer(clanLeaderDTO, clanLandDTO, flag) == null)
-        flagDTO = updateFlag(false, flagDTO)
+        blockBreakDTO = updateFlag(false, blockBreakDTO)
         assert(AstraClansAPI.isFlagEnabledForPlayer(clanLeaderDTO, clanLandDTO, flag) == null)
         // Custom player on clan land
-        flagDTO = updateFlag(true, flagDTO)
+        blockBreakDTO = updateFlag(true, blockBreakDTO)
         assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, clanLandDTO, flag) == true)
-        flagDTO = updateFlag(false, flagDTO)
+        blockBreakDTO = updateFlag(false, blockBreakDTO)
         assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, clanLandDTO, flag) == false)
+        AstraClansAPI.playerStatusProvider = object : IPlayerStatusProvider {
+            override fun isPlayerOnline(playerDTO: ClanMemberDTO): Boolean = false
+            override fun isAnyMemberOnline(clanDTO: ClanDTO): Boolean = false
+        }
 
+        blockBreakDTO = updateFlag(true, blockBreakDTO)
+        assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, clanLandDTO, flag) == true)
+        AstraClansAPI.playerStatusProvider = object : IPlayerStatusProvider {
+            override fun isPlayerOnline(playerDTO: ClanMemberDTO): Boolean = true
+            override fun isAnyMemberOnline(clanDTO: ClanDTO): Boolean = true
+        }
+
+        assert(AstraClansAPI.isFlagEnabledForPlayer(noClanMemberDTO, clanLandDTO, flag) == false)
     }
 
     @Test
