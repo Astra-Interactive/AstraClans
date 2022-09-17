@@ -1,10 +1,18 @@
-package com.astrainteractive.models
+package com.astrainteractive.astraclans.domain
 
-data class PluginConfig(
+val PluginConfig: _PluginConfig?
+    get() = _PluginConfig.instance
+
+data class _PluginConfig(
     val discord: Discord,
     val clan: Clan,
     val economy: Economy
 ) {
+    companion object {
+        var instance: _PluginConfig? = null
+            private set
+    }
+
     data class Economy(
         // Amount to buy discord channel
         val discordChannelPurchaseAmount: Int,
