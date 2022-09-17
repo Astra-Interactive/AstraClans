@@ -1,22 +1,16 @@
 package com.astrainteractive.astraclans.commands.clan
 
-import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.response.*
 import com.astrainteractive.astraclans.domain.api.use_cases.*
-import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
-import com.astrainteractive.astraclans.domain.datasource.FlagDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
-import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
+import com.astrainteractive.astraclans.utils.DiscordController
 import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
-import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.uuid
-import kotlinx.coroutines.launch
-import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 
-object ClanCommandController {
+class ClanCommandController(private val discordController: DiscordController?) {
 
     //aclan leave
     suspend fun leave(sender: Player) {
@@ -26,7 +20,10 @@ object ClanCommandController {
         when (result) {
             ClanLeaveResponse.ErrorInDatabase -> sender.sendTranslationMessage { errorInClanCreating }
             ClanLeaveResponse.NotInClan -> sender.sendTranslationMessage { notClanMember }
-            ClanLeaveResponse.Success -> sender.sendTranslationMessage { successLeave }
+            is ClanLeaveResponse.Success -> {
+                discordController?.onMemberLeave(result.clanDTO, sender.uniqueId)
+                sender.sendTranslationMessage { successLeave }
+            }
             ClanLeaveResponse.YouAreLeader -> sender.sendTranslationMessage { leaderCantLeaveClan }
             null -> sender.sendTranslationMessage { errorInClanCreating }
         }
@@ -40,7 +37,10 @@ object ClanCommandController {
         when (result) {
             ClanDisbandResponse.ErrorInDatabase -> sender.sendTranslationMessage { errorInClanCreating }
             ClanDisbandResponse.NotLeader -> sender.sendTranslationMessage { youAreNotLeader }
-            ClanDisbandResponse.Success -> sender.sendTranslationMessage { successDisband }
+            is ClanDisbandResponse.Success -> {
+                discordController?.onClanDisbanded(result.clanDTO)
+                sender.sendTranslationMessage { successDisband }
+            }
             null -> sender.sendTranslationMessage { errorInClanCreating }
         }
     }
@@ -57,6 +57,7 @@ object ClanCommandController {
             ClanCreateResponse.EmptyClanTag -> player.sendTranslationMessage { noClanTagProvided }
             ClanCreateResponse.PlayerAlreadyInClan -> player.sendTranslationMessage { playerAlreadyInClan }
             is ClanCreateResponse.Success -> {
+                discordController?.onClanCreated(result.clanDTO)
                 player.sendTranslationMessage("%tag%" to clanTag!!) { successClanCreate }
             }
 
@@ -133,6 +134,7 @@ object ClanCommandController {
             ClanJoinResponse.ErrorInDatabase -> sender.sendTranslationMessage { databaseError }
             ClanJoinResponse.NotInvited -> sender.sendTranslationMessage { youNotInvited }
             is ClanJoinResponse.Success -> {
+                discordController?.onMemberJoined(result.clanDTO,result.memberDTO)
                 sender.sendTranslationMessage("%clan%" to clan) { joinedClan }
             }
 

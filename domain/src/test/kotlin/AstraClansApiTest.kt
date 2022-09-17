@@ -21,7 +21,7 @@ class AstraClansApiTest {
             val params = this
             runBlocking { ClanCreateUseCase(params) }
         } as ClanCreateResponse.Success
-        clanDTO = result.result
+        clanDTO = result.clanDTO
         clanLeaderDTO = clanLeaderDTO.copy(clanID = clanDTO.id)
         ClaimChunkUseCase.Params(clanLeaderDTO, clanLandDTO.copy(clanID = clanDTO.id)).also {
             val result = runBlocking { ClaimChunkUseCase(it) } as ClaimChunkResponse.Success

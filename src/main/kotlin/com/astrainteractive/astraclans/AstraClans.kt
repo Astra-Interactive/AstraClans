@@ -1,6 +1,7 @@
 package com.astrainteractive.astraclans
 
 import CommandManager
+import com.astrainteractive.astraclans.commands.clan.ClanCommandController
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
@@ -14,11 +15,10 @@ import com.astrainteractive.astralibs.events.GlobalEventManager
 import com.astrainteractive.astralibs.utils.Injector.inject
 import com.astrainteractive.astralibs.utils.Injector.remember
 import com.astrainteractive.astraclans.events.EventHandler
-import com.astrainteractive.astraclans.utils.PapiExpansions
-import com.astrainteractive.astraclans.utils.PluginTranslation
-import com.astrainteractive.astraclans.utils._Files
-import com.astrainteractive.astraclans.utils._EmpireConfig
+import com.astrainteractive.astraclans.utils.*
+import com.astrainteractive.astralibs.EmpireSerializer
 import com.astrainteractive.astralibs.async.AsyncHelper
+import github.scarsz.discordsrv.DiscordSRV
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.bukkit.Bukkit
@@ -39,19 +39,20 @@ class AstraClans : JavaPlugin() {
     init {
         instance = this
     }
-
     /**
      * Class for handling all of your events
      */
     private lateinit var eventHandler: EventHandler
 
-    /**
-     * Command manager for your commands.
-     *
-     * You can create multiple managers.
-     */
-    private lateinit var commandManager: CommandManager
+    private var isStartedBefore = false
+    private fun onInitialStart(block: () -> Unit) {
+        if (isStartedBefore) return
+        isStartedBefore = true
+        block()
 
+    }
+
+    private fun <T> getPlugin(plugin: String): T? = Bukkit.getPluginManager().getPlugin(plugin) as? T?
 
     /**
      * This method called when server starts or PlugMan load plugin.
@@ -65,18 +66,18 @@ class AstraClans : JavaPlugin() {
         DatabaseModule.createDatabase("${AstraLibs.instance.dataFolder}${File.separator}clans.db")
 
         eventHandler = EventHandler()
-        commandManager = CommandManager()
-        _EmpireConfig.create()
-        Logger.log("Logger enabled", "AstraTemplate")
-        Logger.warn("Warn message from logger", "AstraTemplate")
-        Logger.error("Error message", "AstraTemplate")
-        if (ServerVersion.version == ServerVersion.UNMAINTAINED)
-            Logger.warn("Your server version is not maintained and might be not fully functional!", "AstraTemplate")
-        else
-            Logger.log(
-                "Your server version is: ${ServerVersion.getServerVersion()}. This version is supported!",
-                "AstraTemplate"
-            )
+        _PluginConfig.create {
+            EmpireSerializer.toClass<_PluginConfig>(Files.configFile)
+        }
+        onInitialStart {
+            getPlugin<DiscordSRV>("DiscordSRV")?.let { discordSRV ->
+                remember(DiscordController(discordSRV) { PluginConfig })
+            }
+            remember(ClanCommandController(inject()))
+            CommandManager()
+
+            setupClanPlayerStatusProvider()
+        }
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             if (PapiExpansions.isRegistered) return@let
             PapiExpansions.register()
@@ -84,6 +85,10 @@ class AstraClans : JavaPlugin() {
         AsyncHelper.launch {
             ClanDataSource.selectAll().forEach(AstraClansAPI::rememberClan)
         }
+
+    }
+
+    private fun setupClanPlayerStatusProvider() {
         AstraClansAPI.playerStatusProvider = object : IPlayerStatusProvider {
             override fun isPlayerOnline(playerDTO: ClanMemberDTO): Boolean {
                 return Bukkit.getPlayer(UUID.fromString(playerDTO.minecraftUUID))?.isOnline == true
@@ -100,7 +105,6 @@ class AstraClans : JavaPlugin() {
                 )
                 return isMemberOnline || isLeaderOnline
             }
-
         }
     }
 

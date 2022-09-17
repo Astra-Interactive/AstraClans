@@ -14,7 +14,7 @@ object ClanDisbandUseCase : UseCase<ClanDisbandResponse, ClanDisbandUseCase.Para
         ClanMemberDataSource.deleteFromClan(clanDTO) ?: return ClanDisbandResponse.ErrorInDatabase
         val result = ClanDataSource.delete(clanDTO)
         AstraClansAPI.forgetClan(clanDTO)
-        return if (result) ClanDisbandResponse.Success
+        return if (result) ClanDisbandResponse.Success(clanDTO)
         else ClanDisbandResponse.ErrorInDatabase
     }
 }

@@ -1,5 +1,6 @@
 package com.astrainteractive.astraclans.domain.api.response
 
+import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 
 sealed class ClanJoinResponse : ApiResponse<ClanMemberDTO> {
@@ -7,5 +8,5 @@ sealed class ClanJoinResponse : ApiResponse<ClanMemberDTO> {
     object AlreadyInClan : ClanJoinResponse()
     object NotInvited : ClanJoinResponse()
     object TagNotFound : ClanJoinResponse()
-    class Success(val result: ClanMemberDTO) : ClanJoinResponse()
+    class Success(val clanDTO: ClanDTO,val memberDTO: ClanMemberDTO) : ClanJoinResponse()
 }

@@ -22,7 +22,7 @@ This plugin allows players to create clans and manage it's territories
 
 Astra template has everything(probably) you need including:
 - [x] Creating clans
-- [ ] Deleting clans
+- [x] Deleting clans
 - [ ] Updating clan info
 - [ ] Upload clan images on server
 - [ ] Upload clan info on server

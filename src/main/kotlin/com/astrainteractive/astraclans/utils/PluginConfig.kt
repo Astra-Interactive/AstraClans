@@ -1,8 +1,11 @@
-package com.astrainteractive.astraclans.domain
+package com.astrainteractive.astraclans.utils
 
-val PluginConfig: _PluginConfig?
-    get() = _PluginConfig.instance
+import kotlinx.serialization.Serializable
 
+val PluginConfig: _PluginConfig
+    get() = _PluginConfig.instance!!
+
+@Serializable
 data class _PluginConfig(
     val discord: Discord,
     val clan: Clan,
@@ -11,8 +14,14 @@ data class _PluginConfig(
     companion object {
         var instance: _PluginConfig? = null
             private set
+
+        fun create(creator: () -> _PluginConfig?): _PluginConfig {
+            instance = creator()
+            return instance!!
+        }
     }
 
+    @Serializable
     data class Economy(
         // Amount to buy discord channel
         val discordChannelPurchaseAmount: Int,
@@ -30,9 +39,11 @@ data class _PluginConfig(
         val clanHomeTeleportPurchaseAmount: Int,
     )
 
+    @Serializable
     data class Clan(
         val protection: Protection
     ) {
+        @Serializable
         data class Protection(
             // Max amount of setBase
             val maxHomes: Int = 1,
@@ -41,6 +52,7 @@ data class _PluginConfig(
         )
     }
 
+    @Serializable
     data class Discord(
         // Does plugin need to integrate with discordSRV
         val discordSRV: Boolean = false,
@@ -54,6 +66,7 @@ data class _PluginConfig(
         val maxClanTagLength: Int,
         val clanChat: ClanChat,
     ) {
+        @Serializable
         data class ClanChat(
             // Category of clan channels
             val categoryID: String,

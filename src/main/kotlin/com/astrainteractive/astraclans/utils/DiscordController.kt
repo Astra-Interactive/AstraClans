@@ -1,8 +1,8 @@
 package com.astrainteractive.astraclans.utils
 
-import com.astrainteractive.astraclans.domain._PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astralibs.utils.catching
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.dependencies.jda.api.Permission
 import github.scarsz.discordsrv.dependencies.jda.api.entities.IPermissionHolder
@@ -16,8 +16,11 @@ import java.util.*
 
 class DiscordController(
     private val discordSRV: DiscordSRV,
-    private val pluginConfig: _PluginConfig
+    private val pluginConfigGetter: () -> _PluginConfig
 ) {
+    private val pluginConfig: _PluginConfig
+        get() = pluginConfigGetter()
+
     private fun findClanChannel(clanDTO: ClanDTO): TextChannel? {
         return discordSRV.mainGuild.textChannels.firstOrNull {
             it.name == clanDTO.clanTag
@@ -39,19 +42,20 @@ class DiscordController(
         return guild.createTextChannel(clanDTO.clanTag, category).complete()
     }
 
-    private suspend fun hideClanChannelFromMember(clanDTO: ClanDTO, member: IPermissionHolder): PermissionOverride? {
-        val clanTextChannel = findClanChannel(clanDTO) ?: return null
-        return clanTextChannel.createPermissionOverride(member)
-            .setAllow(emptyList())
-            .setDeny(Permission.VIEW_CHANNEL)
-            .complete()
+    private suspend fun hideClanChannelFromMember(clanDTO: ClanDTO, member: IPermissionHolder) {
+        val clanTextChannel = findClanChannel(clanDTO) ?: return
+        val job =
+            clanTextChannel.getPermissionOverride(member)?.delete() ?: clanTextChannel.createPermissionOverride(member)
+                .setAllow(emptyList())
+                .setDeny(Permission.VIEW_CHANNEL)
+        job.complete()
     }
 
     private suspend fun showClanChannelToMember(
         channel: TextChannel,
         member: IPermissionHolder
     ): PermissionOverride? {
-        return channel.createPermissionOverride(member).setAllow(clanChatMemberPermissions).complete()
+        return catching { channel.createPermissionOverride(member).setAllow(clanChatMemberPermissions).complete() }
     }
 
     private suspend fun allowMembersViewClanChannel(clanDTO: ClanDTO) {
@@ -87,8 +91,8 @@ class DiscordController(
         return showClanChannelToMember(clanTextChannel, member)
     }
 
-    suspend fun onMemberLeave(clanDTO: ClanDTO, uuid: UUID): PermissionOverride? {
-        val member = uuid.asDiscordMember() ?: return null
-        return hideClanChannelFromMember(clanDTO, member)
+    suspend fun onMemberLeave(clanDTO: ClanDTO, uuid: UUID) {
+        val member = uuid.asDiscordMember() ?: return
+        hideClanChannelFromMember(clanDTO, member)
     }
 }

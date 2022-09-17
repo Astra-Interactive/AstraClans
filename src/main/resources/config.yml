@@ -1,14 +1,21 @@
-config1: "string config"
-confi2: 0
-config3: false
-section:
-  value1: "value"
-  value2: 0
-list:
-  - "config"
-  - "config"
-another_list:
-  - value1: "value"
-    value2: 0
-  - value1: "value2"
-    value2: 0
+discord:
+  discordSRV: true
+  leaderRole: "995382001500692571"
+  gameToDiscordFormat: "%player%: %message%"
+  discordToGameFormat: "[D] %name%: %message%"
+  maxClanNameLength: 16
+  maxClanTagLength: 16
+  clanChat:
+    categoryID: "995375231801765978"
+clan:
+  protection:
+    maxHomes: 1
+    homeTeleportCD: 5
+economy:
+  discordChannelPurchaseAmount: 0
+  discordLeaderRolePurchaseAmount: 0
+  clanCreatePurchaseAmount: 0
+  clanInvitePurchaseAmount: 0
+  clanJoinPurchaseAmount: 0
+  clanHomeCreatePurchaseAmount: 0
+  clanHomeTeleportPurchaseAmount: 0

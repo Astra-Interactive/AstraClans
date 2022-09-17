@@ -17,9 +17,10 @@ object ClanLeaveUseCase : UseCase<ClanLeaveResponse, ClanLeaveUseCase.Param>() {
         val realMemberDTO =
             ClanMemberDataSource.select(params.memberDTO.minecraftUUID) ?: return ClanLeaveResponse.NotInClan
         ClanMemberDataSource.delete(realMemberDTO) ?: return ClanLeaveResponse.ErrorInDatabase
-        ClanDataSource.selectByID(realMemberDTO.clanID)?.let { clanDTO ->
+        val clanDTO = ClanDataSource.selectByID(realMemberDTO.clanID)?.let { clanDTO ->
             AstraClansAPI.onMemberChanged(clanDTO)
+            clanDTO
         }
-        return ClanLeaveResponse.Success
+        return clanDTO?.let { ClanLeaveResponse.Success(clanDTO) }
     }
 }

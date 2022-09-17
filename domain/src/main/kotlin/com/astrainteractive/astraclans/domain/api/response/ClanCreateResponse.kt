@@ -7,5 +7,5 @@ sealed class ClanCreateResponse : ApiResponse<ClanDTO> {
     object ClanCreateError : ClanCreateResponse()
     object EmptyClanTag : ClanCreateResponse()
     object EmptyClanName : ClanCreateResponse()
-    class Success(val result: ClanDTO) : ClanCreateResponse()
+    class Success(val clanDTO: ClanDTO) : ClanCreateResponse()
 }

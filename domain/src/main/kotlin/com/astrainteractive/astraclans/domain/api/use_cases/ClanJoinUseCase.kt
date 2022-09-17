@@ -24,6 +24,6 @@ object ClanJoinUseCase : UseCase<ClanJoinResponse, ClanJoinUseCase.Params>() {
         PendingInviteDataSource.removeAll(memberDTO.minecraftUUID)
         val result = ClanMemberDataSource.insert(clanDTO, memberDTO) ?: return ClanJoinResponse.ErrorInDatabase
         AstraClansAPI.onMemberChanged(clanDTO)
-        return ClanJoinResponse.Success(result)
+        return ClanJoinResponse.Success(clanDTO, result)
     }
 }

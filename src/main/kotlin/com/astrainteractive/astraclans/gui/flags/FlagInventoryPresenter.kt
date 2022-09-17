@@ -9,12 +9,14 @@ import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
+import com.astrainteractive.astralibs.utils.Injector.inject
 import com.astrainteractive.astralibs.utils.uuid
 import kotlinx.coroutines.launch
 
 
 class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtility, private val view: IFlagView) {
     val playerClan = AstraClansAPI.getPlayerClan(playerMenuUtility.player.toDTO())
+    val clanCommandController :ClanCommandController = inject()!!
     private val _flagList: MutableMap<FlagsEnum, FlagDTO> = playerClan?.flags?.associateBy {
         it.flag
     }?.toMutableMap()?.apply {
@@ -43,7 +45,7 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
             it.copy(enabled = !it.enabled)
         } ?: return
         AsyncHelper.launch {
-            val result = ClanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled)
+            val result = clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled)
             if (result !is SetClanFlagsResponse.Success) return@launch
             _flagList[flag.flag] = result.result
 
