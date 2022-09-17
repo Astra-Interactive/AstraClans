@@ -75,14 +75,29 @@ class DiscordController(
             .mapNotNull { uuid -> UUID.fromString(uuid).asDiscordMember() }
     }
 
+    suspend fun giveLeaderRole(clanDTO: ClanDTO) {
+        val leaderMember = UUID.fromString(clanDTO.leaderUUID).asDiscordMember() ?: return
+        val leaderRoleID = pluginConfig.discord.leaderRole ?: return
+        val leaderRole = discordSRV.mainGuild.getRoleById(leaderRoleID) ?: return
+        discordSRV.mainGuild.addRoleToMember(leaderMember, leaderRole).complete()
+    }
+    suspend fun removeLeaderRole(clanDTO: ClanDTO){
+        val leaderMember = UUID.fromString(clanDTO.leaderUUID).asDiscordMember() ?: return
+        val leaderRoleID = pluginConfig.discord.leaderRole ?: return
+        val leaderRole = discordSRV.mainGuild.getRoleById(leaderRoleID) ?: return
+        discordSRV.mainGuild.removeRoleFromMember(leaderMember, leaderRole).complete()
+    }
+
     suspend fun onClanCreated(clanDTO: ClanDTO) {
         createClanTextChannel(clanDTO)
         hideClanChannelFromMember(clanDTO, discordSRV.mainGuild.publicRole)
         allowMembersViewClanChannel(clanDTO)
+        giveLeaderRole(clanDTO)
     }
 
     suspend fun onClanDisbanded(clanDTO: ClanDTO) {
         findClanChannel(clanDTO)?.delete()?.complete()
+        removeLeaderRole(clanDTO)
     }
 
     suspend fun onMemberJoined(clanDTO: ClanDTO, clanMemberDTO: ClanMemberDTO): PermissionOverride? {
