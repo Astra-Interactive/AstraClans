@@ -4,6 +4,7 @@ import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.response.ClanDisbandResponse
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
+import com.astrainteractive.astraclans.domain.datasource.LandDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 
 object ClanDisbandUseCase : UseCase<ClanDisbandResponse, ClanDisbandUseCase.Param>() {
@@ -12,6 +13,7 @@ object ClanDisbandUseCase : UseCase<ClanDisbandResponse, ClanDisbandUseCase.Para
     override suspend fun run(params: Param): ClanDisbandResponse? {
         val clanDTO = ClanDataSource.select(params.clanMemberDTO.minecraftUUID) ?: return ClanDisbandResponse.NotLeader
         ClanMemberDataSource.deleteFromClan(clanDTO) ?: return ClanDisbandResponse.ErrorInDatabase
+        LandDataSource.delete(clanDTO) ?: return ClanDisbandResponse.ErrorInDatabase
         val result = ClanDataSource.delete(clanDTO)
         AstraClansAPI.forgetClan(clanDTO)
         return if (result) ClanDisbandResponse.Success(clanDTO)

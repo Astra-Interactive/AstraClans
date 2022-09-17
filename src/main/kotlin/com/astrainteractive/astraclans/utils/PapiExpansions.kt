@@ -2,6 +2,7 @@ package com.astrainteractive.astraclans.utils
 
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 
 object PapiExpansions : PlaceholderExpansion() {
@@ -11,11 +12,11 @@ object PapiExpansions : PlaceholderExpansion() {
 
     override fun getVersion(): String = "1.0.0"
     override fun onRequest(player: OfflinePlayer?, params: String): String? {
-        val default = { super.onRequest(player, params) }
+        val default = { "" }
         player ?: return default()
         return when (params) {
-            "clan" -> AstraClansAPI.getPlayerClan(player.toDTO())?.clanName
-            "clan_tag" -> AstraClansAPI.getPlayerClan(player.toDTO())?.clanTag
+            "clan" -> AstraClansAPI.getPlayerClan(player.toDTO())?.clanName?.let { "[$it${ChatColor.RESET}]" } ?: default()
+            "clan_tag" -> AstraClansAPI.getPlayerClan(player.toDTO())?.clanTag?.let { "[$it${ChatColor.RESET}]" } ?: default()
             else -> default()
         }
     }

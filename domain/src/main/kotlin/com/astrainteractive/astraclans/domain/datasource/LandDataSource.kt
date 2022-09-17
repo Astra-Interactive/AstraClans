@@ -1,11 +1,13 @@
 package com.astrainteractive.astraclans.domain.datasource
 
+import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.LandDTO
 import com.astrainteractive.astraclans.domain.dto.mapping.map
 import com.astrainteractive.astraclans.domain.entities.Clan
 import com.astrainteractive.astraclans.domain.entities.Land
 import com.astrainteractive.astraclans.domain.entities.LandDAO
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -22,13 +24,19 @@ object LandDataSource {
         return result
     }
 
-    fun select(worldName:String,x:Int,z:Int): LandDTO? {
+    fun select(worldName: String, x: Int, z: Int): LandDTO? {
         val result = transaction {
             LandDAO.find {
                 (Land.x eq x).and(Land.z eq z).and(Land.worldName eq worldName)
             }.firstOrNull()?.map()
         }
         return result
+    }
+
+    fun delete(clanDTO: ClanDTO) {
+        val result = transaction {
+            LandDAO.find(Land.clanID eq clanDTO.id).map { it.delete() }
+        }
     }
 
     fun delete(landDTO: LandDTO): Boolean {

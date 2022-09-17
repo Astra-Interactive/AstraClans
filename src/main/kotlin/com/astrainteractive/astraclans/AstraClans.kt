@@ -39,6 +39,7 @@ class AstraClans : JavaPlugin() {
     init {
         instance = this
     }
+
     /**
      * Class for handling all of your events
      */
@@ -79,7 +80,11 @@ class AstraClans : JavaPlugin() {
             setupClanPlayerStatusProvider()
         }
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
-            if (PapiExpansions.isRegistered) return@let
+            if (PapiExpansions.isRegistered) {
+                Logger.warn("PAPI already registered")
+                return@let
+            }
+            Logger.log("PAPI registered")
             PapiExpansions.register()
         }
         AsyncHelper.launch {
