@@ -21,10 +21,7 @@ object ClanCreateUseCase : UseCase<ClanCreateResponse, ClanCreateUseCase.Params>
         val player = params.player
         if (clanTag == null) return ClanCreateResponse.EmptyClanTag
         if (clanName == null) return ClanCreateResponse.EmptyClanName
-        println("All clans: ${ClanDataSource.selectAll()}")
-        println("Player: ${player}")
         ClanDataSource.select(player.minecraftUUID)?.let {
-            println("Found leader: $it")
             return ClanCreateResponse.PlayerAlreadyInClan
         }
         ClanMemberDataSource.select(player.minecraftUUID)?.let {

@@ -36,8 +36,10 @@ class EventDebounce<K : IDebounce>(debounceTime: Long) {
     ): Entry? where T : Event?, T : Cancellable? {
         val entry: Entry? = catching { cache.getUnchecked(key) }
         val isCancelled = entry?.isCancelled ?: cancellation() ?: return entry
-        originalEvent?.isCancelled = isCancelled
-        entry?.isCancelled = isCancelled
+        if (isCancelled) {
+            originalEvent?.isCancelled = isCancelled
+            entry?.isCancelled = isCancelled
+        }
         return entry
 
     }

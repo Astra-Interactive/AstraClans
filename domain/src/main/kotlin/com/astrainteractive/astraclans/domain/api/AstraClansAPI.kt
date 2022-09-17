@@ -43,7 +43,6 @@ object AstraClansAPI {
 
     // TODO optimize
     fun getChunkClan(chunk: LandDTO): ClanDTO? {
-        println(clansMap)
         return clansMap.values.firstOrNull {
             it.clanLands.firstOrNull { it.isSame(chunk) } != null
         }

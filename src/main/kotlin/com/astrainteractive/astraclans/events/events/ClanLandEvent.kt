@@ -75,7 +75,7 @@ class ClanLandEvent {
     }
 
     val onEntityExplode = DSLEvent.event(EntityExplodeEvent::class.java) {
-        blockRetractEvent(it.toRetractKey(FlagsEnum.EXPLODE_DENY), it)
+//        blockRetractEvent(it.toRetractKey(FlagsEnum.EXPLODE_DENY), it)
     }
 
     val onBlockPistonRetract = DSLEvent.event(BlockPistonRetractEvent::class.java) {
@@ -193,6 +193,15 @@ class ClanLandEvent {
     val onLingeringApply = DSLEvent.event(AreaEffectCloudApplyEvent::class.java) {
     }
     val onBlockExplode = DSLEvent.event(BlockExplodeEvent::class.java) {
+        it.toRetractKey().map { retractKey ->
+            blockRetractEvent(retractKey, it)
+        }
+    }
+
+    val onEntityExplode2 = DSLEvent.event(EntityExplodeEvent::class.java) {
+        it.toRetractKey(FlagsEnum.EXPLODE_DENY).map { retractKey ->
+            blockRetractEvent(retractKey, it)
+        }
     }
     val onTakeLecternBook = DSLEvent.event(PlayerTakeLecternBookEvent::class.java) {
     }

@@ -33,9 +33,12 @@ fun StructureGrowEvent.toRetractKey(flag: FlagsEnum) = BlockRetractKey(
     chunk = location.chunk.toDTO(), flag = flag
 )
 
-fun EntityExplodeEvent.toRetractKey(flag: FlagsEnum) = BlockRetractKey(
-    chunk = location.chunk.toDTO(), flag = flag
-)
+fun EntityExplodeEvent.toRetractKey(flag: FlagsEnum) = this.blockList().map { it.chunk }.distinct().map {
+    BlockRetractKey(
+        chunk = it.toDTO(),
+        flag = flag
+    )
+}
 
 fun BlockPistonRetractEvent.toRetractKey(flag: FlagsEnum) = BlockRetractKey(
     chunk = block.location.chunk.toDTO(), flag = flag
@@ -107,3 +110,16 @@ fun VehicleDestroyEvent.toRetractKey() = BlockRetractKey(
     chunk = this.vehicle.chunk.toDTO(),
     flag = FlagsEnum.HANGING_PLACE_DENY
 )
+
+fun BlockExplodeEvent.toRetractKey() = this.blockList()
+    .toMutableList()
+    .apply { add(this@toRetractKey.block) }
+    .map { it.chunk }
+    .distinct()
+    .map {
+        BlockRetractKey(
+            chunk = it.toDTO(),
+            flag = FlagsEnum.HANGING_PLACE_DENY
+        )
+    }
+
