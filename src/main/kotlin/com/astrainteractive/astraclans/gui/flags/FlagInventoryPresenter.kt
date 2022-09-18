@@ -8,9 +8,11 @@ import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import com.astrainteractive.astralibs.async.AsyncHelper
+import com.astrainteractive.astralibs.async.BukkitMain
 import com.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
 import com.astrainteractive.astralibs.utils.Injector.inject
 import com.astrainteractive.astralibs.utils.uuid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -49,7 +51,7 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
             if (result !is SetClanFlagsResponse.Success) return@launch
             _flagList[flag.flag] = result.result
 
-            AsyncHelper.callSyncMethod { view.showFlags(flagList) }
+            AsyncHelper.launch(Dispatchers.BukkitMain) { view.showFlags(flagList) }
         }
     }
 

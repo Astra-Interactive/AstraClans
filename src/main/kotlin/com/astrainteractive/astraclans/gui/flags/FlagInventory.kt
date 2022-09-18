@@ -70,7 +70,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
         }
     }
 
-    override fun onInventoryClose(it: InventoryCloseEvent, manager: EventManager) {
+    override fun onDestroy(it: InventoryCloseEvent, manager: EventManager) {
     }
 
     override fun setMenuItems() {

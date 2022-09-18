@@ -9,7 +9,14 @@ import com.astrainteractive.astraclans.events.events.debounce.IPlayerDebounce
 import com.astrainteractive.astraclans.events.events.debounce.toRetractKey
 import com.astrainteractive.astraclans.utils.chunkDTO
 import com.astrainteractive.astraclans.utils.toDTO
+import com.astrainteractive.astralibs.Logger
+import com.astrainteractive.astralibs.async.AsyncHelper
+import com.astrainteractive.astralibs.async.BukkitMain
 import com.astrainteractive.astralibs.events.DSLEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
@@ -21,6 +28,7 @@ import org.bukkit.event.player.*
 import org.bukkit.event.vehicle.VehicleDamageEvent
 import org.bukkit.event.vehicle.VehicleDestroyEvent
 import org.bukkit.event.world.StructureGrowEvent
+import org.bukkit.inventory.EquipmentSlot
 
 class ClanLandEvent {
     private val blockDebounce = EventDebounce.create<IDebounce>(5000)
@@ -44,6 +52,20 @@ class ClanLandEvent {
                 flag = key.flag
             )
         }
+    }
+
+    fun replaceBlocks(location: Location) {
+        for (x in 0..32) {
+            val xLocation = location.clone().add(x.toDouble(), 0.0, 0.0)
+            for (y in 0..32) {
+                val yLocation = xLocation.clone().add(0.0, y.toDouble(), 0.0)
+                for (z in 0..32) {
+                    val zLocation = yLocation.clone().add(0.0, 0.0, z.toDouble())
+                    zLocation.block.type = Material.GLOWSTONE
+                }
+            }
+        }
+
     }
 
     //-------------------------------------------------------------------------

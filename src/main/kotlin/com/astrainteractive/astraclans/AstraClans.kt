@@ -2,6 +2,7 @@ package com.astrainteractive.astraclans
 
 import CommandManager
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
+import com.astrainteractive.astraclans.di.*
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
@@ -18,6 +19,7 @@ import com.astrainteractive.astraclans.events.EventHandler
 import com.astrainteractive.astraclans.utils.*
 import com.astrainteractive.astralibs.EmpireSerializer
 import com.astrainteractive.astralibs.async.AsyncHelper
+import com.astrainteractive.astralibs.utils.Injector
 import github.scarsz.discordsrv.DiscordSRV
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -53,7 +55,6 @@ class AstraClans : JavaPlugin() {
 
     }
 
-    private fun <T> getPlugin(plugin: String): T? = Bukkit.getPluginManager().getPlugin(plugin) as? T?
 
     /**
      * This method called when server starts or PlugMan load plugin.
@@ -71,13 +72,12 @@ class AstraClans : JavaPlugin() {
             EmpireSerializer.toClass<_PluginConfig>(Files.configFile)
         }
         onInitialStart {
-            getPlugin<DiscordSRV>("DiscordSRV")?.let { discordSRV ->
-                remember(DiscordController(discordSRV) { PluginConfig })
-            }
-            remember(ClanCommandController(inject()))
-            CommandManager()
-
-            setupClanPlayerStatusProvider()
+            discordSRV
+            economyProvider
+            clanCommandController
+            commandManager
+            playerStatusProvider
+            AstraClansAPI.playerStatusProvider = inject()
         }
         Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
             if (PapiExpansions.isRegistered) {
@@ -91,26 +91,6 @@ class AstraClans : JavaPlugin() {
             ClanDataSource.selectAll().forEach(AstraClansAPI::rememberClan)
         }
 
-    }
-
-    private fun setupClanPlayerStatusProvider() {
-        AstraClansAPI.playerStatusProvider = object : IPlayerStatusProvider {
-            override fun isPlayerOnline(playerDTO: ClanMemberDTO): Boolean {
-                return Bukkit.getPlayer(UUID.fromString(playerDTO.minecraftUUID))?.isOnline == true
-            }
-
-            override fun isAnyMemberOnline(clanDTO: ClanDTO): Boolean {
-                val isMemberOnline = clanDTO.clanMember.any(::isPlayerOnline)
-                val isLeaderOnline = isPlayerOnline(
-                    ClanMemberDTO(
-                        clanID = clanDTO.id,
-                        minecraftUUID = clanDTO.leaderUUID,
-                        minecraftName = clanDTO.leaderName
-                    )
-                )
-                return isMemberOnline || isLeaderOnline
-            }
-        }
     }
 
     /**
