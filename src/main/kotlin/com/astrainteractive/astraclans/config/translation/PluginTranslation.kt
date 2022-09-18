@@ -1,8 +1,7 @@
-package com.astrainteractive.astraclans.utils
+package com.astrainteractive.astraclans.config.translation
 
 import com.astrainteractive.astralibs.FileManager
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 
 val Translation: PluginTranslation
     get() = PluginTranslation.instance

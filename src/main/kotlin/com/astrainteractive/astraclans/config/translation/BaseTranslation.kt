@@ -1,10 +1,9 @@
-package com.astrainteractive.astraclans.utils
+package com.astrainteractive.astraclans.config.translation
 
 import com.astrainteractive.astralibs.FileManager
 import com.astrainteractive.astralibs.utils.HEX
 import com.astrainteractive.astralibs.utils.getHEXString
 import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.entity.Player
 
 abstract class BaseTranslation {
 

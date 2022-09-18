@@ -1,7 +1,7 @@
 package com.astrainteractive.astraclans.gui.flags
 
+import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
-import com.astrainteractive.astraclans.utils.Translation
 import com.astrainteractive.astraclans.utils.toItemStack
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.events.EventManager

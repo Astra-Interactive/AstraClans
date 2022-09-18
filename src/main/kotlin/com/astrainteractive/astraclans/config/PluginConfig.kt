@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.utils
+package com.astrainteractive.astraclans.config
 
 import kotlinx.serialization.Serializable
 

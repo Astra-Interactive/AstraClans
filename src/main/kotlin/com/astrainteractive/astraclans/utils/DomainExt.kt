@@ -1,5 +1,6 @@
 package com.astrainteractive.astraclans.utils
 
+import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astraclans.domain.dto.*
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum.*
 import com.astrainteractive.astraclans.domain.dto.mapping.NOT_EXISTS_ID

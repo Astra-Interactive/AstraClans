@@ -1,11 +1,11 @@
 package com.astrainteractive.astraclans.commands.clan
 
+import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.domain.api.response.*
 import com.astrainteractive.astraclans.domain.api.use_cases.*
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.utils.DiscordController
-import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import com.astrainteractive.astralibs.utils.uuid
 import org.bukkit.entity.Player

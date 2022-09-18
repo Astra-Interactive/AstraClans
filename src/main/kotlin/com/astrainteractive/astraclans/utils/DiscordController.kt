@@ -1,5 +1,6 @@
 package com.astrainteractive.astraclans.utils
 
+import com.astrainteractive.astraclans.config._PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astralibs.utils.catching

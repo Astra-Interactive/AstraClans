@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.utils
+package com.astrainteractive.astraclans.config
 
 import com.astrainteractive.astralibs.FileManager
 

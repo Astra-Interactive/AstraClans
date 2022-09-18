@@ -2,8 +2,8 @@ package com.astrainteractive.astraclans.commands
 
 import CommandManager
 import com.astrainteractive.astraclans.AstraClans
-import com.astrainteractive.astraclans.utils.AstraPermission
-import com.astrainteractive.astraclans.utils.Translation
+import com.astrainteractive.astraclans.config.AstraPermission
+import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.utils.registerCommand
 

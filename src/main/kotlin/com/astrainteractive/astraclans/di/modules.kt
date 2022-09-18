@@ -2,13 +2,11 @@ package com.astrainteractive.astraclans.di
 
 import CommandManager
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
+import com.astrainteractive.astraclans.config.PluginConfig
 import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.utils.DiscordController
-import com.astrainteractive.astraclans.utils.Files
-import com.astrainteractive.astraclans.utils.PluginConfig
-import com.astrainteractive.astraclans.utils._Files
 import com.astrainteractive.astralibs.utils.Injector
 import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
 import com.astrainteractive.astralibs.utils.economy.VaultEconomyProvider

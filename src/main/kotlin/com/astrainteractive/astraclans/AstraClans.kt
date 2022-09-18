@@ -2,6 +2,10 @@ package com.astrainteractive.astraclans
 
 import CommandManager
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
+import com.astrainteractive.astraclans.config.Files
+import com.astrainteractive.astraclans.config._Files
+import com.astrainteractive.astraclans.config._PluginConfig
+import com.astrainteractive.astraclans.config.translation.PluginTranslation
 import com.astrainteractive.astraclans.di.*
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI

@@ -3,9 +3,8 @@ package com.astrainteractive.astraclans.commands.clan
 import CommandManager
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
-import com.astrainteractive.astraclans.utils.AstraPermission
-import com.astrainteractive.astraclans.utils.DiscordController
-import com.astrainteractive.astraclans.utils.sendTranslationMessage
+import com.astrainteractive.astraclans.config.AstraPermission
+import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.registerCommand
@@ -13,7 +12,6 @@ import com.astrainteractive.astralibs.utils.valueOfOrNull
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.jetbrains.annotations.Async
 
 
 fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
