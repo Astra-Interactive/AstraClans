@@ -22,7 +22,7 @@ fun CommandManager.reload() = AstraLibs.registerCommand("aclanreload") { sender,
         return@registerCommand
     }
     sender.sendMessage(Translation.reload)
-    AstraClans.instance.reloadPlugin()
+    AstraClans.instance.reload()
     sender.sendMessage(Translation.reloadComplete)
 }
 

@@ -1,38 +1,23 @@
 package com.astrainteractive.astraclans
 
-import CommandManager
-import com.astrainteractive.astraclans.commands.clan.ClanCommandController
-import com.astrainteractive.astraclans.config.Files
-import com.astrainteractive.astraclans.config._Files
-import com.astrainteractive.astraclans.config._PluginConfig
-import com.astrainteractive.astraclans.config.translation.PluginTranslation
+import com.astrainteractive.astraclans.config.*
+import com.astrainteractive.astraclans.config.config.ConfigProvider
+import com.astrainteractive.astraclans.config.config.IConfigProvider
 import com.astrainteractive.astraclans.di.*
-import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
-import com.astrainteractive.astraclans.domain.dto.ClanDTO
-import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.Logger
-import com.astrainteractive.astralibs.ServerVersion
 import com.astrainteractive.astralibs.events.GlobalEventManager
 import com.astrainteractive.astralibs.utils.Injector.inject
-import com.astrainteractive.astralibs.utils.Injector.remember
 import com.astrainteractive.astraclans.events.EventHandler
 import com.astrainteractive.astraclans.utils.*
-import com.astrainteractive.astralibs.EmpireSerializer
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.Injector
-import github.scarsz.discordsrv.DiscordSRV
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.bukkit.Bukkit
-import org.bukkit.Chunk
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
-import java.io.File
-import java.util.*
 
 /**
  * Initial class for your plugin
@@ -66,35 +51,39 @@ class AstraClans : JavaPlugin() {
     override fun onEnable() {
         AstraLibs.rememberPlugin(this)
         Logger.prefix = "AstraTemplate"
-        PluginTranslation()
-        _Files()
-
-        DatabaseModule.createDatabase("${AstraLibs.instance.dataFolder}${File.separator}clans.db")
 
         eventHandler = EventHandler()
-        _PluginConfig.create {
-            EmpireSerializer.toClass<_PluginConfig>(Files.configFile)
-        }
-        onInitialStart {
-            discordSRV
-            economyProvider
-            clanCommandController
-            commandManager
-            playerStatusProvider
-            AstraClansAPI.playerStatusProvider = inject()
-        }
-        Bukkit.getPluginManager().getPlugin("PlaceholderAPI")?.let {
-            if (PapiExpansions.isRegistered) {
+        pluginTranslation
+        fileModule
+        configModule
+        databaseModule
+        discordSRV
+        economyProvider
+        clanCommandController
+        commandManager
+        AstraClansAPI.playerStatusProvider = playerStatusProvider
+
+        if (isPluginExists("PlaceholderAPI")) {
+            if (PapiExpansions.isRegistered)
                 Logger.warn("PAPI already registered")
-                return@let
+            else {
+                Logger.log("PAPI registered")
+                PapiExpansions.register()
             }
-            Logger.log("PAPI registered")
-            PapiExpansions.register()
         }
+
         AsyncHelper.launch {
             ClanDataSource.selectAll().forEach(AstraClansAPI::rememberClan)
         }
 
+    }
+
+    fun reload() {
+        val configProvider: IConfigProvider = inject()
+        val files = Injector.inject<Files>().also {
+            it.configFile.reload()
+        }
+        configProvider.config = ConfigProvider.loadPluginConfig(files.configFile)
     }
 
     /**
@@ -104,17 +93,9 @@ class AstraClans : JavaPlugin() {
         eventHandler.onDisable()
         HandlerList.unregisterAll(this)
         GlobalEventManager.onDisable()
-        PapiExpansions.unregister()
+        if (isPluginExists("PlaceholderAPI"))
+            PapiExpansions.unregister()
     }
-
-    /**
-     * As it says, function for plugin reload
-     */
-    fun reloadPlugin() {
-        onDisable()
-        onEnable()
-    }
-
 }
 
 

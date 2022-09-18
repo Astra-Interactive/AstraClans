@@ -41,5 +41,6 @@ object DatabaseModule {
         databaseBuilder: (path: String) -> Database = { defaultDatabaseBuilder(it) }
     ) {
         database = databaseBuilder(path)
+//        return database!!
     }
 }

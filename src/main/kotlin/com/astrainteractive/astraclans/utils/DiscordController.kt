@@ -1,6 +1,7 @@
 package com.astrainteractive.astraclans.utils
 
-import com.astrainteractive.astraclans.config._PluginConfig
+import com.astrainteractive.astraclans.config.config.IConfigProvider
+import com.astrainteractive.astraclans.config.config.PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astralibs.utils.catching
@@ -17,10 +18,10 @@ import java.util.*
 
 class DiscordController(
     private val discordSRV: DiscordSRV,
-    private val pluginConfigGetter: () -> _PluginConfig
+    private val pluginConfigGetter: IConfigProvider
 ) {
-    private val pluginConfig: _PluginConfig
-        get() = pluginConfigGetter()
+    private val pluginConfig: PluginConfig
+        get() = pluginConfigGetter.config
 
     private fun findClanChannel(clanDTO: ClanDTO): TextChannel? {
         return discordSRV.mainGuild.textChannels.firstOrNull {

@@ -1,6 +1,6 @@
 package com.astrainteractive.astraclans.config.translation
 
-import com.astrainteractive.astralibs.FileManager
+import com.astrainteractive.astralibs.file_manager.FileManager
 import org.bukkit.command.CommandSender
 
 val Translation: PluginTranslation

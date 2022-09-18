@@ -6,9 +6,12 @@ import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astralibs.utils.Injector
+import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
 
 
 object ClanCreateUseCase : UseCase<ClanCreateResponse, ClanCreateUseCase.Params>() {
+
     class Params(
         val clanTag: String?,
         val clanName: String?,

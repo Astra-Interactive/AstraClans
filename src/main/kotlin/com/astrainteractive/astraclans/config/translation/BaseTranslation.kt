@@ -1,6 +1,6 @@
 package com.astrainteractive.astraclans.config.translation
 
-import com.astrainteractive.astralibs.FileManager
+import com.astrainteractive.astralibs.file_manager.FileManager
 import com.astrainteractive.astralibs.utils.HEX
 import com.astrainteractive.astralibs.utils.getHEXString
 import org.bukkit.configuration.file.FileConfiguration
@@ -11,7 +11,7 @@ abstract class BaseTranslation {
 
     protected abstract val fileManager: FileManager
     protected val fileConfig: FileConfiguration
-        get() = fileManager.getConfig()
+        get() = fileManager.fileConfiguration
 
     protected abstract fun onCreate()
 
@@ -24,7 +24,7 @@ abstract class BaseTranslation {
         val msg = fileConfig.getHEXString(path) ?: default.HEX()
         if (!fileConfig.contains(path)) {
             fileConfig.set(path, default)
-            fileManager.saveConfig()
+            fileManager.save()
         }
         return msg
     }

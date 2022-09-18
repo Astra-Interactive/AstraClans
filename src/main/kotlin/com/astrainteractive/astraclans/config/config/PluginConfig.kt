@@ -1,26 +1,13 @@
-package com.astrainteractive.astraclans.config
+package com.astrainteractive.astraclans.config.config
 
 import kotlinx.serialization.Serializable
 
-val PluginConfig: _PluginConfig
-    get() = _PluginConfig.instance!!
-
 @Serializable
-data class _PluginConfig(
+data class PluginConfig(
     val discord: Discord,
     val clan: Clan,
     val economy: Economy
 ) {
-    companion object {
-        var instance: _PluginConfig? = null
-            private set
-
-        fun create(creator: () -> _PluginConfig?): _PluginConfig {
-            instance = creator()
-            return instance!!
-        }
-    }
-
     @Serializable
     data class Economy(
         // Amount to buy discord channel
