@@ -2,7 +2,7 @@ package com.astrainteractive.astraclans
 
 import com.astrainteractive.astraclans.config.*
 import com.astrainteractive.astraclans.config.config.ConfigProvider
-import com.astrainteractive.astraclans.config.config.IConfigProvider
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.di.*
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
@@ -15,10 +15,8 @@ import com.astrainteractive.astraclans.utils.*
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.Injector
 import kotlinx.coroutines.launch
-import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
-
 /**
  * Initial class for your plugin
  */

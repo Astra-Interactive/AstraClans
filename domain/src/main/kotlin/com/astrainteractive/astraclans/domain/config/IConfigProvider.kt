@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.config.config
+package com.astrainteractive.astraclans.domain.config
 
 interface IConfigProvider {
     var config: PluginConfig

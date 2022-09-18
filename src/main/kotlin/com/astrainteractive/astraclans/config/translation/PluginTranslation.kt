@@ -86,6 +86,10 @@ class PluginTranslation(
         path = "clan.player_already_in_clan"
         default = "${Colors.negative}У вас уже есть клан"
     }
+    val notEnoguhMoney = translationDetails {
+        path = "clan.not_enough_money"
+        default = "${Colors.negative}Недостаточно денег"
+    }
     val errorInClanCreating = translationDetails {
         path = "clan.create_clan_error"
         default = "${Colors.negative}Не удалось создать клан"

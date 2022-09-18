@@ -62,6 +62,7 @@ class ClanCommandController(private val discordController: DiscordController?) {
             }
 
             null -> player.sendTranslationMessage { errorInClanCreating }
+            ClanCreateResponse.NotEnoughMoney ->  player.sendTranslationMessage { notEnoguhMoney }
         }
     }
 

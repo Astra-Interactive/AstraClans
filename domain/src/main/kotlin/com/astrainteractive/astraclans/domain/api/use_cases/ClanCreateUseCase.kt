@@ -2,15 +2,22 @@ package com.astrainteractive.astraclans.domain.api.use_cases
 
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.response.ClanCreateResponse
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
+import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astralibs.utils.Injector
 import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
+import java.util.*
 
 
 object ClanCreateUseCase : UseCase<ClanCreateResponse, ClanCreateUseCase.Params>() {
+    private val configProvider: IConfigProvider by Injector.lazyInject()
+    private val economyProvider: IEconomyProvider by Injector.lazyInject()
+    val config: PluginConfig
+        get() = configProvider.config
 
     class Params(
         val clanTag: String?,
@@ -30,6 +37,13 @@ object ClanCreateUseCase : UseCase<ClanCreateResponse, ClanCreateUseCase.Params>
         ClanMemberDataSource.select(player.minecraftUUID)?.let {
             return ClanCreateResponse.PlayerAlreadyInClan
         }
+        val playerUUID = UUID.fromString(player.minecraftUUID)
+        val playerBalance = economyProvider.getBalance(playerUUID) ?: 0.0
+        println("Balance: $playerBalance; required: ${config.economy.clanCreatePurchaseAmount}")
+        if (playerBalance < config.economy.clanCreatePurchaseAmount)
+            return ClanCreateResponse.NotEnoughMoney
+        val takeMoneyResult = economyProvider.takeMoney(playerUUID, config.economy.clanCreatePurchaseAmount.toDouble())
+        if (!takeMoneyResult) return ClanCreateResponse.NotEnoughMoney
         val _clanDTO = ClanDTO(
             clanTag = clanTag,
             clanName = clanName,

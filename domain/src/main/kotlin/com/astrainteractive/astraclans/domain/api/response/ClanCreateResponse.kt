@@ -4,6 +4,7 @@ import com.astrainteractive.astraclans.domain.dto.ClanDTO
 
 sealed class ClanCreateResponse : ApiResponse<ClanDTO> {
     object PlayerAlreadyInClan : ClanCreateResponse()
+    object NotEnoughMoney : ClanCreateResponse()
     object ClanCreateError : ClanCreateResponse()
     object EmptyClanTag : ClanCreateResponse()
     object EmptyClanName : ClanCreateResponse()

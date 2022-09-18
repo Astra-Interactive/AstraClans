@@ -26,6 +26,10 @@ dependencies {
     implementation(Dependencies.Implementation.exposedJDBC)
     implementation(Dependencies.Implementation.exposedCORD)
     implementation(Dependencies.Implementation.exposedDAO)
+    // Serialization
+    implementation(Dependencies.Implementation.kotlinxSerialization)
+    implementation(Dependencies.Implementation.kotlinxSerializationJson)
+    implementation(Dependencies.Implementation.kotlinxSerializationYaml)
     // AstraLibs
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 

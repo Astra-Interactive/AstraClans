@@ -7,9 +7,10 @@ authors: [ MakeevRoman ]
 author: MakeevRoman
 website: AstraInteractive.ru
 api-version: 1.18
-softdepend: [ DiscordSRV, PlaceholderAPI ]
+softdepend: [ DiscordSRV, PlaceholderAPI, Vault, EssentialsX, Essentials ]
 depend: [ ]
 loadbefore: [ ]
+loadAfter: [ DiscordSRV, PlaceholderAPI, Vault, EssentialsX, Essentials ]
 commands:
   aclan:
   aclanreload:

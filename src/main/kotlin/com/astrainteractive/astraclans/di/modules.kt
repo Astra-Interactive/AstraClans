@@ -4,7 +4,7 @@ import CommandManager
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
 import com.astrainteractive.astraclans.config.*
 import com.astrainteractive.astraclans.config.config.ConfigProvider
-import com.astrainteractive.astraclans.config.config.IConfigProvider
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.config.translation.PluginTranslation
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
@@ -12,6 +12,7 @@ import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.utils.DiscordController
 import com.astrainteractive.astralibs.AstraLibs
+import com.astrainteractive.astralibs.Logger
 import com.astrainteractive.astralibs.utils.Injector
 import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
 import com.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
@@ -44,7 +45,7 @@ val pluginTranslation = run {
 val discordSRV = run {
     getPlugin<DiscordSRV>("DiscordSRV")?.let { discordSRV ->
         Injector.remember(DiscordController(discordSRV, Injector.inject()))
-    }
+    }?:Logger.warn("DiscordSRV not found")
 }
 val clanCommandController = run {
     val discordController: DiscordController? = Injector.inject()
@@ -54,8 +55,14 @@ val commandManager = run {
     Injector.remember(CommandManager())
 }
 val economyProvider = run {
-    if (isPluginExists("Vault"))
-        Injector.remember(VaultEconomyProvider as IEconomyProvider)
+    if (isPluginExists("Vault")) {
+        val vaultProvider = VaultEconomyProvider.also {
+            it.onEnable()
+        }
+        Injector.remember(vaultProvider as IEconomyProvider)
+    }
+    else
+        Logger.warn("Vault not found")
 }
 val playerStatusProvider = run {
     object : IPlayerStatusProvider {
