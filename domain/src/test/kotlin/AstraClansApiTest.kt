@@ -1,7 +1,5 @@
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.response.ClaimChunkResponse
-import com.astrainteractive.astraclans.domain.api.response.ClanCreateResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import kotlinx.coroutines.runBlocking
@@ -17,15 +15,14 @@ class AstraClansApiTest {
     @BeforeTest
     fun prepare() {
         DatabaseModule.createDatabase(REAL_DB)
-        val result = ClanCreateUseCase.Params(clanDTO.clanTag, clanDTO.clanName, clanLeaderDTO).run {
+        val clanDTO = ClanCreateUseCase.Params(clanDTO.clanTag, clanDTO.clanName, clanLeaderDTO).run {
             val params = this
             runBlocking { ClanCreateUseCase(params) }
-        } as ClanCreateResponse.Success
-        clanDTO = result.clanDTO
+        }
         clanLeaderDTO = clanLeaderDTO.copy(clanID = clanDTO.id)
         ClaimChunkUseCase.Params(clanLeaderDTO, clanLandDTO.copy(clanID = clanDTO.id)).also {
-            val result = runBlocking { ClaimChunkUseCase(it) } as ClaimChunkResponse.Success
-            clanLandDTO = result.result
+            val result = runBlocking { ClaimChunkUseCase(it) }
+            clanLandDTO = result
         }
     }
 

@@ -2,10 +2,12 @@ package usacease
 
 import REAL_DB
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.response.ClanCreateResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import randomize
 
 import kotlin.test.BeforeTest
@@ -24,8 +26,7 @@ class ClanCreateUseCase {
                 minecraftName = randomize(), minecraftUUID = randomize()
             )
         ).also { params ->
-            val noTagResult = runBlocking { ClanCreateUseCase(params) }
-            assert(noTagResult is ClanCreateResponse.EmptyClanTag)
+            assertThrows<ClanOperationException.EmptyClanTag> { runBlocking { ClanCreateUseCase(params) } }
         }
 
         ClanCreateUseCase.Params(
@@ -33,18 +34,14 @@ class ClanCreateUseCase {
                 minecraftName = randomize(), minecraftUUID = randomize()
             )
         ).also { params ->
-            val noNameResult = runBlocking { ClanCreateUseCase(params) }
-            assert(noNameResult is ClanCreateResponse.EmptyClanName)
-
+            assertThrows<ClanOperationException.EmptyClanName> { runBlocking { ClanCreateUseCase(params) } }
         }
 
         val playerDTO = ClanMemberDTO(
             minecraftName = randomize(), minecraftUUID = randomize()
         )
         val params = ClanCreateUseCase.Params(randomize(), randomize(), playerDTO)
-        val success = runBlocking { ClanCreateUseCase(params) }
-        assert(success is ClanCreateResponse.Success)
-        val clanLeaderError = runBlocking { ClanCreateUseCase(params) }
-        assert(clanLeaderError is ClanCreateResponse.PlayerAlreadyInClan)
+        assertDoesNotThrow { runBlocking { ClanCreateUseCase(params) } }
+        assertThrows<ClanOperationException.AlreadyInClan> { runBlocking { ClanCreateUseCase(params) } }
     }
 }

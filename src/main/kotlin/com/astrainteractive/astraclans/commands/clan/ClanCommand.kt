@@ -5,6 +5,8 @@ import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
 import com.astrainteractive.astraclans.config.AstraPermission
 import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.registerCommand
@@ -16,7 +18,6 @@ import org.bukkit.entity.Player
 
 fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
     AstraLibs.registerCommand("aclan") { sender, args ->
-
         if (sender !is Player) {
             sender.sendTranslationMessage { notPlayer }
             return@registerCommand
@@ -48,6 +49,7 @@ fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
                 AsyncHelper.launch { clanCommandController.join(sender, clanTag) }
 
             }
+
 
             "update" -> {
 

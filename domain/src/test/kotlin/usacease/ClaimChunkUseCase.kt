@@ -2,11 +2,13 @@ package usacease
 
 import REAL_DB
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.response.ClaimChunkResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import randomize
 
 import kotlin.test.BeforeTest
@@ -29,18 +31,15 @@ class ClaimChunkUseCase {
         )
         val landDTO = DTO.LandDTO
         ClaimChunkUseCase.Params(clanMemberDTO, landDTO).also {
-            val result = runBlocking { ClaimChunkUseCase(it) }
-            assert(result is ClaimChunkResponse.NotLeader)
+            assertThrows<ClanOperationException.PlayerNotClanLeader> { runBlocking { ClaimChunkUseCase(it) } }
         }
 
         ClaimChunkUseCase.Params(clanLeaderMemberDTO, landDTO).also {
-            val result = runBlocking { ClaimChunkUseCase(it) }
-            assert(result is ClaimChunkResponse.Success)
+            assertDoesNotThrow { runBlocking { ClaimChunkUseCase(it) }  }
         }
 
         ClaimChunkUseCase.Params(clanLeaderMemberDTO, landDTO).also {
-            val result = runBlocking { ClaimChunkUseCase(it) }
-            assert(result is ClaimChunkResponse.AlreadyClaimed)
+            assertThrows<ClanOperationException.LandAlreadyClaimed> { runBlocking { ClaimChunkUseCase(it) } }
         }
 
     }

@@ -1,25 +1,28 @@
 package com.astrainteractive.astraclans.domain.api.use_cases
 
-import com.astrainteractive.astraclans.domain.api.response.InvitePlayerResponse
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.datasource.PendingInviteDataSource
-import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.PendingInviteDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 
-object InvitePlayerUseCase : UseCase<InvitePlayerResponse, InvitePlayerUseCase.Params>() {
+object InvitePlayerUseCase : UseCase<PendingInviteDTO, InvitePlayerUseCase.Params>() {
     class Params(val leaderDTO: ClanMemberDTO, val memberDTO: ClanMemberDTO)
 
-    override suspend fun run(params: Params): InvitePlayerResponse? {
-        val clanDTO = ClanDataSource.select(params.leaderDTO.minecraftUUID) ?: return InvitePlayerResponse.NotLeader
-        if (clanDTO.leaderUUID == params.memberDTO.minecraftUUID) return InvitePlayerResponse.AlreadyInClan
+    override suspend fun run(params: Params): PendingInviteDTO {
+        val sender = params.leaderDTO
+        val clanDTO =
+            ClanDataSource.select(params.leaderDTO.minecraftUUID) ?: throw ClanOperationException.PlayerNotClanLeader(
+                sender
+            )
+        if (clanDTO.leaderUUID == params.memberDTO.minecraftUUID) throw ClanOperationException.AlreadyInClan(sender)
         val isInvited = PendingInviteDataSource.select(params.memberDTO.minecraftUUID).any {
             it.clanID == clanDTO.id
         }
-        if (isInvited) return InvitePlayerResponse.AlreadyInvited
+        if (isInvited) throw ClanOperationException.AlreadyInvited(sender)
         ClanMemberDataSource.select(params.memberDTO.minecraftUUID)?.let {
-            return InvitePlayerResponse.AlreadyInClan
+            throw ClanOperationException.AlreadyInClan(sender)
         }
         val pendingInviteDTO = PendingInviteDataSource.insert(
             PendingInviteDTO(
@@ -27,9 +30,7 @@ object InvitePlayerUseCase : UseCase<InvitePlayerResponse, InvitePlayerUseCase.P
                 minecraftName = params.memberDTO.minecraftName,
                 clanID = clanDTO.id
             )
-        ) ?: run {
-            return InvitePlayerResponse.ErrorInDatabase
-        }
-        return InvitePlayerResponse.Success(pendingInviteDTO)
+        ) ?: throw ClanOperationException.ErrorInDatabase(sender)
+        return pendingInviteDTO
     }
 }

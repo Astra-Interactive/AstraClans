@@ -6,6 +6,7 @@ import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.di.*
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
+import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
 import com.astrainteractive.astralibs.AstraLibs
 import com.astrainteractive.astralibs.Logger
 import com.astrainteractive.astralibs.events.GlobalEventManager
@@ -15,6 +16,7 @@ import com.astrainteractive.astraclans.utils.*
 import com.astrainteractive.astralibs.async.AsyncHelper
 import com.astrainteractive.astralibs.utils.Injector
 import kotlinx.coroutines.launch
+import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 /**
@@ -49,7 +51,7 @@ class AstraClans : JavaPlugin() {
     override fun onEnable() {
         AstraLibs.rememberPlugin(this)
         Logger.prefix = "AstraTemplate"
-
+        ExceptionHandler.handler = ClanExceptionHandler
         eventHandler = EventHandler()
         pluginTranslation
         fileModule
@@ -60,7 +62,6 @@ class AstraClans : JavaPlugin() {
         clanCommandController
         commandManager
         AstraClansAPI.playerStatusProvider = playerStatusProvider
-
         if (isPluginExists("PlaceholderAPI")) {
             if (PapiExpansions.isRegistered)
                 Logger.warn("PAPI already registered")

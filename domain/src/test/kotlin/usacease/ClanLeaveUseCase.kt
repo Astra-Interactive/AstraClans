@@ -4,16 +4,16 @@ import REAL_DB
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.response.ClanJoinResponse
-import com.astrainteractive.astraclans.domain.api.response.ClanLeaveResponse
-import com.astrainteractive.astraclans.domain.api.response.InvitePlayerResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanJoinUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanLeaveUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.InvitePlayerUseCase
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 
 class ClanLeaveUseCase {
     lateinit var clanDTO: ClanDTO
@@ -46,11 +46,11 @@ class ClanLeaveUseCase {
 
     @Test
     fun ClanLeaveUseCase() {
-        assert(leaveClan(clanMemberDTO) is ClanLeaveResponse.NotInClan)
-        assert(invitePlayer() is InvitePlayerResponse.Success)
-        assert(joinClan(clanMemberDTO) is ClanJoinResponse.Success)
-        assert(leaveClan(clanMemberDTO) is ClanLeaveResponse.Success)
-        assert(leaveClan(clanMemberDTO) is ClanLeaveResponse.NotInClan)
-        assert(leaveClan(clanLeaderMemberDTO) is ClanLeaveResponse.YouAreLeader)
+        assertThrows<ClanOperationException.NotInClan> { leaveClan(clanMemberDTO) }
+        assertDoesNotThrow { invitePlayer() }
+        assertDoesNotThrow { joinClan(clanMemberDTO) }
+        assertDoesNotThrow { leaveClan(clanMemberDTO) }
+        assertThrows<ClanOperationException.NotInClan> { leaveClan(clanMemberDTO) }
+        assertThrows<ClanOperationException.YouAreLeader> { leaveClan(clanLeaderMemberDTO) }
     }
 }

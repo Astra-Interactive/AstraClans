@@ -3,7 +3,6 @@ package com.astrainteractive.astraclans.gui.flags
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
 import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.api.response.SetClanFlagsResponse
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.utils.toDTO
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtility, private val view: IFlagView) {
     val playerClan = AstraClansAPI.getPlayerClan(playerMenuUtility.player.toDTO())
-    val clanCommandController :ClanCommandController = inject()!!
+    val clanCommandController: ClanCommandController = inject()!!
     private val _flagList: MutableMap<FlagsEnum, FlagDTO> = playerClan?.flags?.associateBy {
         it.flag
     }?.toMutableMap()?.apply {
@@ -47,9 +46,8 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
             it.copy(enabled = !it.enabled)
         } ?: return
         AsyncHelper.launch {
-            val result = clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled)
-            if (result !is SetClanFlagsResponse.Success) return@launch
-            _flagList[flag.flag] = result.result
+            val result = clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled) ?: return@launch
+            _flagList[flag.flag] = result
 
             AsyncHelper.launch(Dispatchers.BukkitMain) { view.showFlags(flagList) }
         }

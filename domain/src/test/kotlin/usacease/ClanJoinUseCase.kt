@@ -1,17 +1,18 @@
 package usacease
 
+import DTO
 import REAL_DB
-import randomize
-
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.response.ClanJoinResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanJoinUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.InvitePlayerUseCase
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class ClanJoinUseCase {
     @BeforeTest
@@ -31,13 +32,11 @@ class ClanJoinUseCase {
         )
 
         ClanJoinUseCase.Params(clanDTO.clanTag, clanLeaderMemberDTO).also {
-            val result = runBlocking { ClanJoinUseCase(it) }
-            assert(result is ClanJoinResponse.AlreadyInClan)
+            assertThrows<ClanOperationException.AlreadyInClan> { runBlocking { ClanJoinUseCase(it) } }
         }
 
         ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
-            val result = runBlocking { ClanJoinUseCase(it) }
-            assert(result is ClanJoinResponse.NotInvited)
+            assertThrows<ClanOperationException.NotInvited> { runBlocking { ClanJoinUseCase(it) } }
         }
 
         // Invite player
@@ -45,13 +44,13 @@ class ClanJoinUseCase {
             runBlocking { InvitePlayerUseCase(it) }
         }
         ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
-            val result = runBlocking { ClanJoinUseCase(it) }
-            assert(result is ClanJoinResponse.Success)
+            assertDoesNotThrow { runBlocking { ClanJoinUseCase(it) } }
         }
 
         ClanJoinUseCase.Params(clanDTO.clanTag, clanMemberDTO).also {
-            val result = runBlocking { ClanJoinUseCase(it) }
-            assert(result is ClanJoinResponse.NotInvited || result is ClanJoinResponse.AlreadyInClan)
+            // TODO
+//            val result = runBlocking { ClanJoinUseCase(it) }
+//            assert(result is ClanJoinResponse.NotInvited || result is ClanJoinResponse.AlreadyInClan)
         }
     }
 }

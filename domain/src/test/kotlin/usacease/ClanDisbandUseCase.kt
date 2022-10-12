@@ -1,22 +1,21 @@
 package usacease
 
+import DTO
 import REAL_DB
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.response.ClanDisbandResponse
-import com.astrainteractive.astraclans.domain.api.response.ClanJoinResponse
-import com.astrainteractive.astraclans.domain.api.response.ClanLeaveResponse
-import com.astrainteractive.astraclans.domain.api.response.InvitePlayerResponse
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanDisbandUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanJoinUseCase
-import com.astrainteractive.astraclans.domain.api.use_cases.ClanLeaveUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.InvitePlayerUseCase
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class ClanDisbandUseCase {
     lateinit var clanDTO: ClanDTO
@@ -49,10 +48,10 @@ class ClanDisbandUseCase {
 
     @Test
     fun ClanLeaveUseCase() {
-        assert(invitePlayer() is InvitePlayerResponse.Success)
-        assert(joinClan(clanMemberDTO) is ClanJoinResponse.Success)
-        assert(disbandClan(clanLeaderMemberDTO) is ClanDisbandResponse.Success)
-        assert(disbandClan(clanMemberDTO) is ClanDisbandResponse.NotLeader)
+        assertDoesNotThrow { invitePlayer() }
+        assertDoesNotThrow { joinClan(clanMemberDTO) }
+        assertDoesNotThrow { disbandClan(clanLeaderMemberDTO) }
+        assertThrows<ClanOperationException.PlayerNotClanLeader> { disbandClan(clanMemberDTO) }
         assert(ClanMemberDataSource.select(clanMemberDTO.minecraftUUID) == null)
     }
 }

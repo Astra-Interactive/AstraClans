@@ -114,6 +114,10 @@ class PluginTranslation(
         path = "clan.leader_cant_leave"
         default = "${Colors.negative}Лидер не может покинуть клан"
     }
+    val youAreLeader = translationDetails {
+        path = "clan.you_leader"
+        default = "${Colors.negative}Вы лидер клана. Это действие вам недоступно"
+    }
     val successClanCreate = translationDetails {
         path = "clan.create_clan_success"
         default = "${Colors.positive}Клан %tag% успешно создан"

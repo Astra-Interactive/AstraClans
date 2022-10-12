@@ -1,8 +1,8 @@
+
+
 import com.astrainteractive.astraclans.domain.DatabaseModule
-import com.astrainteractive.astraclans.domain.api.*
-import com.astrainteractive.astraclans.domain.api.response.ClaimChunkResponse
-import com.astrainteractive.astraclans.domain.api.response.ClanCreateResponse
-import com.astrainteractive.astraclans.domain.api.response.SetClanFlagsResponse
+import com.astrainteractive.astraclans.domain.api.AstraClansAPI
+import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.SetClanFlagUseCase
@@ -11,7 +11,6 @@ import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import kotlinx.coroutines.runBlocking
-
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -26,24 +25,23 @@ class ProtectionTest {
     @BeforeTest
     fun prepare() {
         DatabaseModule.createDatabase(REAL_DB)
-        val result = ClanCreateUseCase.Params(clanDTO.clanTag, clanDTO.clanName, clanLeaderDTO).run {
+        val clanDTO = ClanCreateUseCase.Params(clanDTO.clanTag, clanDTO.clanName, clanLeaderDTO).run {
             val params = this
             runBlocking { ClanCreateUseCase(params) }
-        } as ClanCreateResponse.Success
-        clanDTO = result.clanDTO
+        }
         clanLeaderDTO = clanLeaderDTO.copy(clanID = clanDTO.id)
         clanMemberDTO = clanMemberDTO.copy(clanID = clanDTO.id)
         ClaimChunkUseCase.Params(clanLeaderDTO, clanLandDTO.copy(clanID = clanDTO.id)).also {
-            val result = runBlocking { ClaimChunkUseCase(it) } as ClaimChunkResponse.Success
-            clanLandDTO = result.result
+            val result = runBlocking { ClaimChunkUseCase(it) }
+            clanLandDTO = result
         }
     }
 
     private fun updateFlag(value: Boolean, flagDTO: FlagDTO): FlagDTO {
         return SetClanFlagUseCase.Params(clanLeaderDTO, flagDTO.copy(enabled = value)).run {
             val param = this
-            runBlocking { SetClanFlagUseCase(param) } as SetClanFlagsResponse.Success
-        }.result
+            runBlocking { SetClanFlagUseCase(param) }
+        }
     }
 
     @Test
