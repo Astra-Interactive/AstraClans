@@ -6,11 +6,16 @@ import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.SetClanFlagUseCase
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import kotlinx.coroutines.runBlocking
+import mock.MockConfigProvider
+import mock.MockEconomyProvider
+import ru.astrainteractive.astralibs.di.Injector
+import ru.astrainteractive.astralibs.utils.economy.IEconomyProvider
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -24,6 +29,8 @@ class ProtectionTest {
 
     @BeforeTest
     fun prepare() {
+        Injector.remember(MockConfigProvider as IConfigProvider)
+        Injector.remember(MockEconomyProvider as IEconomyProvider)
         DatabaseModule.createDatabase(REAL_DB)
         val clanDTO = ClanCreateUseCase.Params(clanDTO.clanTag, clanDTO.clanName, clanLeaderDTO).run {
             val params = this

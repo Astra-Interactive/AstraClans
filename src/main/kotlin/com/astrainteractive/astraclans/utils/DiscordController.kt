@@ -40,7 +40,7 @@ class DiscordController(
     private suspend fun createClanTextChannel(clanDTO: ClanDTO): TextChannel? {
         if (findClanChannel(clanDTO) != null) return null
         val guild = discordSRV.mainGuild
-        val category = guild.getCategoryById(pluginConfig.discord.clanChat.categoryID)
+        val category = guild.getCategoryById(pluginConfig.discord.clanChat?.categoryID?:return null)
         return guild.createTextChannel(clanDTO.clanTag, category).complete()
     }
 
