@@ -8,8 +8,8 @@ import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
-import com.astrainteractive.astralibs.utils.Injector
-import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
+import ru.astrainteractive.astralibs.di.Injector
+import ru.astrainteractive.astralibs.utils.economy.IEconomyProvider
 import java.util.*
 
 

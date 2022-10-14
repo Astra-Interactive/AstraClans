@@ -3,12 +3,6 @@ package com.astrainteractive.astraclans.gui.flags
 import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.utils.toItemStack
-import com.astrainteractive.astralibs.async.AsyncHelper
-import com.astrainteractive.astralibs.events.EventManager
-import com.astrainteractive.astralibs.menu.AstraMenuSize
-import com.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
-import com.astrainteractive.astralibs.menu.PaginatedMenu
-import com.astrainteractive.astralibs.utils.setDisplayName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,8 +11,11 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
-
-
+import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.events.EventManager
+import ru.astrainteractive.astralibs.menu.AstraMenuSize
+import ru.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
+import ru.astrainteractive.astralibs.menu.PaginatedMenu
 
 
 class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
@@ -78,7 +75,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
     }
 
     init {
-        AsyncHelper.launch(Dispatchers.IO) {
+        PluginScope.launch(Dispatchers.IO) {
             while (!isInventoryInitialized())
                 delay(10)
             presenter = FlagInventoryPresenter(playerMenuUtility, this@FlagInventory)

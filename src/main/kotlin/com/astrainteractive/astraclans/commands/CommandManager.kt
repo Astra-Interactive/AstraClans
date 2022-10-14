@@ -1,7 +1,7 @@
 import com.astrainteractive.astraclans.commands.*
 import com.astrainteractive.astraclans.commands.clan.ClanCommand
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
-import com.astrainteractive.astralibs.utils.Injector.inject
+import ru.astrainteractive.astralibs.di.Injector.inject
 
 
 /**

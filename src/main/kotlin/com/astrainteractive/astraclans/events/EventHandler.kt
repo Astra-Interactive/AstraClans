@@ -1,9 +1,9 @@
 package com.astrainteractive.astraclans.events
 
 import com.astrainteractive.astraclans.events.events.ClanLandEvent
-import com.astrainteractive.astralibs.events.EventListener
-import com.astrainteractive.astralibs.events.EventManager
-import com.astrainteractive.astralibs.menu.MenuListener
+import ru.astrainteractive.astralibs.events.EventListener
+import ru.astrainteractive.astralibs.events.EventManager
+import ru.astrainteractive.astralibs.menu.MenuListener
 
 
 /**

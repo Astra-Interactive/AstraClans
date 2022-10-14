@@ -17,7 +17,14 @@ java {
 }
 repositories {
     mavenCentral()
-    flatDir { dirs("libs") }
+    maven {
+        url = uri("https://maven.pkg.github.com/Astra-Interactive/AstraLibs")
+        val config = project.getConfig()
+        credentials {
+            username = config.username
+            password = config.token
+        }
+    }
 }
 
 dependencies {
@@ -35,6 +42,9 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("org.testng:testng:7.1.0")
+
+    implementation("ru.astrainteractive.astralibs:ktx-core:${Dependencies.Kotlin.astraLibs}")
+    implementation("ru.astrainteractive.astralibs:spigot-core:${Dependencies.Kotlin.astraLibs}")
 
 }
 

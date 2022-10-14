@@ -4,7 +4,6 @@ import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
-import com.astrainteractive.astralibs.utils.catching
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.dependencies.jda.api.Permission
 import github.scarsz.discordsrv.dependencies.jda.api.entities.IPermissionHolder
@@ -14,6 +13,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import ru.astrainteractive.astralibs.utils.catching
 import java.util.*
 
 class DiscordController(

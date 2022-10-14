@@ -1,6 +1,6 @@
 package com.astrainteractive.astraclans.events.events.debounce
 
-import com.astrainteractive.astralibs.utils.catching
+import ru.astrainteractive.astralibs.utils.catching
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

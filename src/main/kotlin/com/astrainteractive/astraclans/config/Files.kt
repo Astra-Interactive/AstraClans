@@ -1,6 +1,6 @@
 package com.astrainteractive.astraclans.config
 
-import com.astrainteractive.astralibs.file_manager.FileManager
+import ru.astrainteractive.astralibs.file_manager.FileManager
 
 
 /**

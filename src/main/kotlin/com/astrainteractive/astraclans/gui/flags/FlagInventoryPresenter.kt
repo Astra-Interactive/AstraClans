@@ -6,13 +6,13 @@ import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.utils.toDTO
-import com.astrainteractive.astralibs.async.AsyncHelper
-import com.astrainteractive.astralibs.async.BukkitMain
-import com.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
-import com.astrainteractive.astralibs.utils.Injector.inject
-import com.astrainteractive.astralibs.utils.uuid
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.astrainteractive.astralibs.async.BukkitMain
+import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.di.Injector.inject
+import ru.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
+import ru.astrainteractive.astralibs.utils.uuid
 
 
 class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtility, private val view: IFlagView) {
@@ -45,11 +45,11 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
         val flag = _flagList.values.elementAtOrNull(i)?.let {
             it.copy(enabled = !it.enabled)
         } ?: return
-        AsyncHelper.launch {
+        PluginScope.launch {
             val result = clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled) ?: return@launch
             _flagList[flag.flag] = result
 
-            AsyncHelper.launch(Dispatchers.BukkitMain) { view.showFlags(flagList) }
+            PluginScope.launch(Dispatchers.BukkitMain) { view.showFlags(flagList) }
         }
     }
 

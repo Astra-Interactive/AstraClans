@@ -2,9 +2,9 @@ package com.astrainteractive.astraclans.commands
 
 
 import CommandManager
-import com.astrainteractive.astralibs.AstraLibs
-import com.astrainteractive.astralibs.utils.registerTabCompleter
-import com.astrainteractive.astralibs.utils.withEntry
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.utils.registerTabCompleter
+import ru.astrainteractive.astralibs.utils.withEntry
 
 /**
  * Tab completer for your plugin which is called when player typing commands

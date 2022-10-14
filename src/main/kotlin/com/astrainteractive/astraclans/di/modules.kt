@@ -2,22 +2,22 @@ package com.astrainteractive.astraclans.di
 
 import CommandManager
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
-import com.astrainteractive.astraclans.config.*
+import com.astrainteractive.astraclans.config.Files
 import com.astrainteractive.astraclans.config.config.ConfigProvider
-import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.config.translation.PluginTranslation
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.IPlayerStatusProvider
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.utils.DiscordController
-import com.astrainteractive.astralibs.AstraLibs
-import com.astrainteractive.astralibs.Logger
-import com.astrainteractive.astralibs.utils.Injector
-import com.astrainteractive.astralibs.utils.economy.IEconomyProvider
-import com.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
 import github.scarsz.discordsrv.DiscordSRV
 import org.bukkit.Bukkit
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.Logger
+import ru.astrainteractive.astralibs.di.Injector
+import ru.astrainteractive.astralibs.utils.economy.IEconomyProvider
+import ru.astrainteractive.astralibs.utils.economy.VaultEconomyProvider
 import java.io.File
 import java.util.*
 
@@ -45,7 +45,7 @@ val pluginTranslation = run {
 val discordSRV = run {
     getPlugin<DiscordSRV>("DiscordSRV")?.let { discordSRV ->
         Injector.remember(DiscordController(discordSRV, Injector.inject()))
-    }?:Logger.warn("DiscordSRV not found")
+    }?: Logger.warn("DiscordSRV not found")
 }
 val clanCommandController = run {
     val discordController: DiscordController? = Injector.inject()

@@ -4,8 +4,8 @@ import CommandManager
 import com.astrainteractive.astraclans.AstraClans
 import com.astrainteractive.astraclans.config.AstraPermission
 import com.astrainteractive.astraclans.config.translation.Translation
-import com.astrainteractive.astralibs.AstraLibs
-import com.astrainteractive.astralibs.utils.registerCommand
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.utils.registerCommand
 
 /**
  * Reload command handler

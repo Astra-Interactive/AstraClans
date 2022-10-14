@@ -8,8 +8,8 @@ import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
 import com.astrainteractive.astraclans.utils.DiscordController
 import com.astrainteractive.astraclans.utils.toDTO
-import com.astrainteractive.astralibs.utils.uuid
 import org.bukkit.entity.Player
+import ru.astrainteractive.astralibs.utils.uuid
 
 class ClanCommandController(private val discordController: DiscordController?) {
     fun Player.toMemberDTO() = ClanMemberDTO(

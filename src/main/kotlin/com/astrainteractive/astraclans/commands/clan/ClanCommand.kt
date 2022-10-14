@@ -1,19 +1,17 @@
 package com.astrainteractive.astraclans.commands.clan
 
 import CommandManager
-import com.astrainteractive.astraclans.domain.dto.FlagsEnum
-import com.astrainteractive.astraclans.gui.flags.FlagInventory
 import com.astrainteractive.astraclans.config.AstraPermission
 import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
-import com.astrainteractive.astraclans.domain.exception.ClanOperationException
-import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
-import com.astrainteractive.astralibs.AstraLibs
-import com.astrainteractive.astralibs.async.AsyncHelper
-import com.astrainteractive.astralibs.utils.registerCommand
-import com.astrainteractive.astralibs.utils.valueOfOrNull
+import com.astrainteractive.astraclans.domain.dto.FlagsEnum
+import com.astrainteractive.astraclans.gui.flags.FlagInventory
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.utils.registerCommand
+import ru.astrainteractive.astralibs.utils.valueOfOrNull
 
 
 fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
@@ -28,7 +26,7 @@ fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
                     sender.sendTranslationMessage { noPermission }
                     return@registerCommand
                 }
-                AsyncHelper.launch {
+                PluginScope.launch {
                     clanCommandController.createClan(
                         clanTag = args.getOrNull(1),
                         clanName = args.getOrNull(2),
@@ -40,13 +38,13 @@ fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
             "invite" -> {
                 val playerName = args.getOrNull(1)
                 val player = playerName?.let { Bukkit.getPlayer(it) }
-                AsyncHelper.launch { clanCommandController.invite(sender, player) }
+                PluginScope.launch { clanCommandController.invite(sender, player) }
 
             }
 
             "join" -> {
                 val clanTag = args.getOrNull(1)
-                AsyncHelper.launch { clanCommandController.join(sender, clanTag) }
+                PluginScope.launch { clanCommandController.join(sender, clanTag) }
 
             }
 
@@ -56,22 +54,22 @@ fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
             }
 
             "disband" -> {
-                AsyncHelper.launch { clanCommandController.disband(sender) }
+                PluginScope.launch { clanCommandController.disband(sender) }
             }
 
             "leave" -> {
-                AsyncHelper.launch { clanCommandController.leave(sender) }
+                PluginScope.launch { clanCommandController.leave(sender) }
             }
 
             "claim" -> {
-                AsyncHelper.launch { clanCommandController.clanClaim(player = sender) }
+                PluginScope.launch { clanCommandController.clanClaim(player = sender) }
             }
 
             // aclan flag <flag> <bool>
             "flag" -> {
                 val flag = valueOfOrNull<FlagsEnum>(args.getOrNull(1) ?: "")
                 val value = args.getOrNull(2)?.toBoolean() ?: true
-                AsyncHelper.launch { clanCommandController.setFlag(player = sender, flag = flag, value = value) }
+                PluginScope.launch { clanCommandController.setFlag(player = sender, flag = flag, value = value) }
             }
 
             "flags" -> {

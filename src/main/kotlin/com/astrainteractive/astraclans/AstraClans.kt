@@ -2,23 +2,22 @@ package com.astrainteractive.astraclans
 
 import com.astrainteractive.astraclans.config.*
 import com.astrainteractive.astraclans.config.config.ConfigProvider
-import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.di.*
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
+import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
-import com.astrainteractive.astralibs.AstraLibs
-import com.astrainteractive.astralibs.Logger
-import com.astrainteractive.astralibs.events.GlobalEventManager
-import com.astrainteractive.astralibs.utils.Injector.inject
 import com.astrainteractive.astraclans.events.EventHandler
 import com.astrainteractive.astraclans.utils.*
-import com.astrainteractive.astralibs.async.AsyncHelper
-import com.astrainteractive.astralibs.utils.Injector
 import kotlinx.coroutines.launch
-import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.astralibs.AstraLibs
+import ru.astrainteractive.astralibs.Logger
+import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.di.Injector
+import ru.astrainteractive.astralibs.events.GlobalEventManager
+
 /**
  * Initial class for your plugin
  */
@@ -71,14 +70,14 @@ class AstraClans : JavaPlugin() {
             }
         }
 
-        AsyncHelper.launch {
+        PluginScope.launch {
             ClanDataSource.selectAll().forEach(AstraClansAPI::rememberClan)
         }
 
     }
 
     fun reload() {
-        val configProvider: IConfigProvider = inject()
+        val configProvider: IConfigProvider = Injector.inject()
         val files = Injector.inject<Files>().also {
             it.configFile.reload()
         }

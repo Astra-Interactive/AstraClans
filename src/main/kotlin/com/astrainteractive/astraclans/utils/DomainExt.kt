@@ -4,8 +4,6 @@ import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astraclans.domain.dto.*
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum.*
 import com.astrainteractive.astraclans.domain.dto.mapping.NOT_EXISTS_ID
-import com.astrainteractive.astralibs.utils.then
-import com.astrainteractive.astralibs.utils.uuid
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Material
@@ -13,6 +11,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import ru.astrainteractive.astralibs.utils.uuid
 import java.util.*
 
 val ClanDTO.offlineLeader: OfflinePlayer
