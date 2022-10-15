@@ -2,8 +2,8 @@ package com.astrainteractive.astraclans.commands
 
 import CommandManager
 import com.astrainteractive.astraclans.AstraClans
-import com.astrainteractive.astraclans.config.AstraPermission
-import com.astrainteractive.astraclans.config.translation.Translation
+import com.astrainteractive.astraclans.modules.TranslationProvider
+import com.astrainteractive.astraclans.utils.AstraPermission
 import ru.astrainteractive.astralibs.AstraLibs
 import ru.astrainteractive.astralibs.utils.registerCommand
 
@@ -17,13 +17,14 @@ import ru.astrainteractive.astralibs.utils.registerCommand
  * Here you should also check for permission
  */
 fun CommandManager.reload() = AstraLibs.registerCommand("aclanreload") { sender, args ->
+    val translation = TranslationProvider.value
     if (!AstraPermission.Reload.hasPermission(sender)) {
-        sender.sendMessage(Translation.noPermission)
+        sender.sendMessage(translation.noPermission)
         return@registerCommand
     }
-    sender.sendMessage(Translation.reload)
+    sender.sendMessage(translation.reload)
     AstraClans.instance.reload()
-    sender.sendMessage(Translation.reloadComplete)
+    sender.sendMessage(translation.reloadComplete)
 }
 
 

@@ -1,9 +1,9 @@
-package com.astrainteractive.astraclans
+package com.astrainteractive.astraclans.utils
 
-import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import com.astrainteractive.astraclans.domain.exception.IClanExceptionHandler
+import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
 import org.bukkit.Bukkit
 import java.util.*
 

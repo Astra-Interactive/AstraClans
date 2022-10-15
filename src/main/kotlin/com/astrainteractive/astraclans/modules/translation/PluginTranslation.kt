@@ -1,14 +1,11 @@
-package com.astrainteractive.astraclans.config.translation
+package com.astrainteractive.astraclans.modules.translation
 
+import com.astrainteractive.astraclans.modules.TranslationProvider
 import org.bukkit.command.CommandSender
 import ru.astrainteractive.astralibs.file_manager.FileManager
 
-val Translation: PluginTranslation
-    get() = PluginTranslation.instance
-
-
 fun CommandSender.sendTranslationMessage(vararg args: Pair<String, Any>, msg: PluginTranslation.() -> String) {
-    var msg = msg(PluginTranslation.instance)
+    var msg = msg(TranslationProvider.value)
     args.forEach { msg = msg.replace(it.first, it.second.toString()) }
     sendMessage(msg)
 }
@@ -19,23 +16,11 @@ fun CommandSender.sendTranslationMessage(vararg args: Pair<String, Any>, msg: Pl
 class PluginTranslation(
     override val fileManager: FileManager = FileManager("translations.yml")
 ) : BaseTranslation() {
-    /**
-     * For better access better to create [instance]
-     */
-    companion object {
-        internal lateinit var instance: PluginTranslation
-    }
-
     object Colors {
         const val negative = "#ca1e1b"
         const val positive = "#2aca1b"
         const val default = "#1b6aca"
     }
-
-    override fun onCreate() {
-        instance = this
-    }
-
     //General
     val prefix: String = getHEXString("general.prefix", "${Colors.positive}[EmpireItems]")
     val reload: String = getHEXString("general.reload", "${Colors.default}Перезагрузка плагина")

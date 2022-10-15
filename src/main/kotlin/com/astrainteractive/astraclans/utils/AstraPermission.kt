@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.config
+package com.astrainteractive.astraclans.utils
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

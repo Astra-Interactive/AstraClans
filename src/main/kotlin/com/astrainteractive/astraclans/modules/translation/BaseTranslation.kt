@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.config.translation
+package com.astrainteractive.astraclans.modules.translation
 
 import org.bukkit.configuration.file.FileConfiguration
 import ru.astrainteractive.astralibs.file_manager.FileManager
@@ -12,8 +12,6 @@ abstract class BaseTranslation {
     protected abstract val fileManager: FileManager
     protected val fileConfig: FileConfiguration
         get() = fileManager.fileConfiguration
-
-    protected abstract fun onCreate()
 
     /**
      * This function will write non-existing translation into config file
@@ -42,9 +40,5 @@ abstract class BaseTranslation {
     fun translationDetails(path: String, default: String) = translationDetails {
         this.path = path
         this.default = default
-    }
-
-    init {
-        onCreate()
     }
 }

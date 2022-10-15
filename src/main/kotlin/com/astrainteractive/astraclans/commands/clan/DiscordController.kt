@@ -1,9 +1,10 @@
-package com.astrainteractive.astraclans.utils
+package com.astrainteractive.astraclans.commands.clan
 
-import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.modules.ConfigProvider
+import com.astrainteractive.astraclans.modules.DiscordSRVModule
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.dependencies.jda.api.Permission
 import github.scarsz.discordsrv.dependencies.jda.api.entities.IPermissionHolder
@@ -16,15 +17,14 @@ import kotlinx.coroutines.coroutineScope
 import ru.astrainteractive.astralibs.utils.catching
 import java.util.*
 
-class DiscordController(
-    private val discordSRV: DiscordSRV,
-    private val pluginConfigGetter: IConfigProvider
-) {
+object DiscordController {
+    private val discordSRV: DiscordSRV?
+        get() = DiscordSRVModule.value
     private val pluginConfig: PluginConfig
-        get() = pluginConfigGetter.config
+        get() = ConfigProvider.value
 
     private fun findClanChannel(clanDTO: ClanDTO): TextChannel? {
-        return discordSRV.mainGuild.textChannels.firstOrNull {
+        return discordSRV?.mainGuild?.textChannels?.firstOrNull {
             it.name == clanDTO.clanTag
         }
     }
@@ -33,14 +33,14 @@ class DiscordController(
         get() = EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_WRITE, Permission.MESSAGE_ATTACH_FILES)
 
     private suspend fun UUID.asDiscordMember(): Member? {
-        val discordID = discordSRV.accountLinkManager.getDiscordId(this)
-        return discordSRV.mainGuild.getMemberById(discordID)
+        val discordID = discordSRV?.accountLinkManager?.getDiscordId(this) ?: return null
+        return discordSRV?.mainGuild?.getMemberById(discordID)
     }
 
     private suspend fun createClanTextChannel(clanDTO: ClanDTO): TextChannel? {
         if (findClanChannel(clanDTO) != null) return null
-        val guild = discordSRV.mainGuild
-        val category = guild.getCategoryById(pluginConfig.discord.clanChat?.categoryID?:return null)
+        val guild = discordSRV?.mainGuild ?: return null
+        val category = guild.getCategoryById(pluginConfig.discord.clanChat?.categoryID ?: return null)
         return guild.createTextChannel(clanDTO.clanTag, category).complete()
     }
 
@@ -80,19 +80,20 @@ class DiscordController(
     suspend fun giveLeaderRole(clanDTO: ClanDTO) {
         val leaderMember = UUID.fromString(clanDTO.leaderUUID).asDiscordMember() ?: return
         val leaderRoleID = pluginConfig.discord.leaderRole ?: return
-        val leaderRole = discordSRV.mainGuild.getRoleById(leaderRoleID) ?: return
-        discordSRV.mainGuild.addRoleToMember(leaderMember, leaderRole).complete()
+        val leaderRole = discordSRV?.mainGuild?.getRoleById(leaderRoleID) ?: return
+        discordSRV?.mainGuild?.addRoleToMember(leaderMember, leaderRole)?.complete()
     }
-    suspend fun removeLeaderRole(clanDTO: ClanDTO){
+
+    suspend fun removeLeaderRole(clanDTO: ClanDTO) {
         val leaderMember = UUID.fromString(clanDTO.leaderUUID).asDiscordMember() ?: return
         val leaderRoleID = pluginConfig.discord.leaderRole ?: return
-        val leaderRole = discordSRV.mainGuild.getRoleById(leaderRoleID) ?: return
-        discordSRV.mainGuild.removeRoleFromMember(leaderMember, leaderRole).complete()
+        val leaderRole = discordSRV?.mainGuild?.getRoleById(leaderRoleID) ?: return
+        discordSRV?.mainGuild?.removeRoleFromMember(leaderMember, leaderRole)?.complete()
     }
 
     suspend fun onClanCreated(clanDTO: ClanDTO) {
         createClanTextChannel(clanDTO)
-        hideClanChannelFromMember(clanDTO, discordSRV.mainGuild.publicRole)
+        hideClanChannelFromMember(clanDTO, discordSRV?.mainGuild?.publicRole?:return)
         allowMembersViewClanChannel(clanDTO)
         giveLeaderRole(clanDTO)
     }

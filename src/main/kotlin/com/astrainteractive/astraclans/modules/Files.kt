@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.config
+package com.astrainteractive.astraclans.modules
 
 import ru.astrainteractive.astralibs.file_manager.FileManager
 
@@ -6,7 +6,7 @@ import ru.astrainteractive.astralibs.file_manager.FileManager
 /**
  * All plugin files such as config.yml and other should only be stored here!
  */
-class Files {
+object Files {
     val configFile: FileManager =
         FileManager("config.yml")
 }

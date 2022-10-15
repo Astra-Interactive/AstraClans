@@ -1,7 +1,11 @@
 package com.astrainteractive.astraclans.domain.api
 
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
-import com.astrainteractive.astraclans.domain.dto.*
+import com.astrainteractive.astraclans.domain.di.IPlayerStatusProvider
+import com.astrainteractive.astraclans.domain.dto.ClanDTO
+import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
+import com.astrainteractive.astraclans.domain.dto.FlagsEnum
+import com.astrainteractive.astraclans.domain.dto.LandDTO
 import com.astrainteractive.astraclans.domain.getFlagOrNull
 import com.astrainteractive.astraclans.domain.isSame
 

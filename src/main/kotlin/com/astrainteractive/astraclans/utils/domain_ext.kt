@@ -1,9 +1,10 @@
 package com.astrainteractive.astraclans.utils
 
-import com.astrainteractive.astraclans.config.translation.Translation
 import com.astrainteractive.astraclans.domain.dto.*
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum.*
 import com.astrainteractive.astraclans.domain.dto.mapping.NOT_EXISTS_ID
+import com.astrainteractive.astraclans.modules.TranslationProvider
+import com.astrainteractive.astraclans.modules.translation.PluginTranslation
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Material
@@ -66,74 +67,77 @@ fun ItemStack.withMeta(block: ItemMeta.() -> Unit): ItemStack = apply {
     }
 }
 
+private val translation: PluginTranslation
+    get() = TranslationProvider.value
+
 fun FlagsEnum.toItemStack(enabled: Boolean): ItemStack {
     return when (this) {
         BLOCK_BREAK_DENY -> ItemStack(Material.BEDROCK).withMeta {
-            setDisplayName(Translation.flagBlockBreak)
+            setDisplayName(translation.flagBlockBreak)
         }
 
         BLOCK_PLACE_DENY -> ItemStack(Material.GRASS_BLOCK).withMeta {
-            setDisplayName(Translation.flagBlockPlace)
+            setDisplayName(translation.flagBlockPlace)
         }
 
         BLOCK_IGNITE_DENY -> ItemStack(Material.FLINT_AND_STEEL).withMeta {
-            setDisplayName(Translation.flagBlockIgnite)
+            setDisplayName(translation.flagBlockIgnite)
         }
 
         CREATURE_SPAWN_DENY -> ItemStack(Material.HORSE_SPAWN_EGG).withMeta {
-            setDisplayName(Translation.flagCreatureSpawn)
+            setDisplayName(translation.flagCreatureSpawn)
         }
 
         GROW_DENY -> ItemStack(Material.GRASS_BLOCK).withMeta {
-            setDisplayName(Translation.flagBlockGrowDeny)
+            setDisplayName(translation.flagBlockGrowDeny)
         }
 
         EXPLODE_DENY -> ItemStack(Material.TNT).withMeta {
-            setDisplayName(Translation.flagBlockExplode)
+            setDisplayName(translation.flagBlockExplode)
         }
 
         PISTON_DENY -> ItemStack(Material.PISTON).withMeta {
-            setDisplayName(Translation.flagBlockPiston)
+            setDisplayName(translation.flagBlockPiston)
         }
 
         BLOCK_DAMAGE_DENY -> ItemStack(Material.DIAMOND_PICKAXE).withMeta {
-            setDisplayName(Translation.flagBlockDamage)
+            setDisplayName(translation.flagBlockDamage)
         }
 
         BLOCK_INTERACT_DENY -> ItemStack(Material.REDSTONE_TORCH).withMeta {
-            setDisplayName(Translation.flagBlockInteract)
+            setDisplayName(translation.flagBlockInteract)
         }
 
         BLOCK_FORM_DENY -> ItemStack(Material.BLUE_ICE).withMeta {
-            setDisplayName(Translation.flagBlockForm)
+            setDisplayName(translation.flagBlockForm)
         }
 
         BLOCK_FERTILIZE_EVENT_DENY -> ItemStack(Material.SAND).withMeta {
-            setDisplayName(Translation.flagBlockFertilize)
+            setDisplayName(translation.flagBlockFertilize)
         }
 
         SIGN_CHANGE_DENY -> ItemStack(Material.ACACIA_SIGN).withMeta {
-            setDisplayName(Translation.flagSignChange)
+            setDisplayName(translation.flagSignChange)
         }
 
         BUCKET_EMPTY_DENY -> ItemStack(Material.BUCKET).withMeta {
-            setDisplayName(Translation.flagBucketEmpty)
+            setDisplayName(translation.flagBucketEmpty)
         }
 
         BUCKET_FILL_DENY -> ItemStack(Material.WATER_BUCKET).withMeta {
-            setDisplayName(Translation.flagBucketFill)
+            setDisplayName(translation.flagBucketFill)
         }
 
         HANGING_PLACE_DENY -> ItemStack(Material.ITEM_FRAME).withMeta {
-            setDisplayName(Translation.flagHangingPlace)
+            setDisplayName(translation.flagHangingPlace)
         }
 
         HANGING_BREAK_DENY -> ItemStack(Material.GLOW_ITEM_FRAME).withMeta {
-            setDisplayName(Translation.flagHangingBreak)
+            setDisplayName(translation.flagHangingBreak)
         }
     }.withMeta {
         lore = listOf(
-            Translation.flagIsEnabled + if (enabled) Translation.flagTrue else Translation.flagFalse
+            translation.flagIsEnabled + if (enabled) translation.flagTrue else translation.flagFalse
         )
     }
 

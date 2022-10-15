@@ -1,23 +1,23 @@
 package com.astrainteractive.astraclans.domain.api.use_cases
 
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
-import com.astrainteractive.astraclans.domain.config.IConfigProvider
 import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
+import com.astrainteractive.astraclans.domain.di.IConfigProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
-import ru.astrainteractive.astralibs.di.Injector
 import ru.astrainteractive.astralibs.utils.economy.IEconomyProvider
 import java.util.*
 
 
-object ClanCreateUseCase : UseCase<ClanDTO, ClanCreateUseCase.Params>() {
-    private val configProvider: IConfigProvider by Injector.lazyInject()
-    private val economyProvider: IEconomyProvider by Injector.lazyInject()
+class ClanCreateUseCase(
+    private val configProvider: IConfigProvider,
+    private val economyProvider: IEconomyProvider?
+) : UseCase<ClanDTO, ClanCreateUseCase.Params>() {
     val config: PluginConfig
-        get() = configProvider.config
+        get() = configProvider.value
 
     class Params(
         val clanTag: String?,
@@ -38,11 +38,12 @@ object ClanCreateUseCase : UseCase<ClanDTO, ClanCreateUseCase.Params>() {
             throw ClanOperationException.AlreadyInClan(player)
         }
         val playerUUID = UUID.fromString(player.minecraftUUID)
-        val playerBalance = economyProvider.getBalance(playerUUID) ?: 0.0
+        val playerBalance = economyProvider?.getBalance(playerUUID) ?: 0.0
         println("Balance: $playerBalance; required: ${config.economy.clanCreatePurchaseAmount}")
         if (playerBalance < config.economy.clanCreatePurchaseAmount)
             throw ClanOperationException.NotEnoughMoney(player)
-        val takeMoneyResult = economyProvider.takeMoney(playerUUID, config.economy.clanCreatePurchaseAmount.toDouble())
+        val takeMoneyResult =
+            economyProvider?.takeMoney(playerUUID, config.economy.clanCreatePurchaseAmount.toDouble()) ?: false
         if (!takeMoneyResult) throw ClanOperationException.NotEnoughMoney(player)
         val _clanDTO = ClanDTO(
             clanTag = clanTag,

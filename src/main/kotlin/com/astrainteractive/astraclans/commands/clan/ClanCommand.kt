@@ -1,10 +1,10 @@
 package com.astrainteractive.astraclans.commands.clan
 
 import CommandManager
-import com.astrainteractive.astraclans.config.AstraPermission
-import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
+import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
+import com.astrainteractive.astraclans.utils.AstraPermission
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player

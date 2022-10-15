@@ -1,4 +1,4 @@
-package com.astrainteractive.astraclans.domain.api
+package com.astrainteractive.astraclans.domain.di
 
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO

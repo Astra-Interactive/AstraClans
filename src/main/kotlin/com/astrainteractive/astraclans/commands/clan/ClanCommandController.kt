@@ -1,17 +1,24 @@
 package com.astrainteractive.astraclans.commands.clan
 
-import com.astrainteractive.astraclans.config.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.domain.api.use_cases.*
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
-import com.astrainteractive.astraclans.utils.DiscordController
+import com.astrainteractive.astraclans.modules.ConfigProvider
+import com.astrainteractive.astraclans.modules.VaultEconomyModule
+import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.utils.uuid
 
-class ClanCommandController(private val discordController: DiscordController?) {
+object ClanCommandController {
+    private val discordController: DiscordController?
+        get() = DiscordController
+
+    val clanCreateUseCase: ClanCreateUseCase
+        get() = ClanCreateUseCase(ConfigProvider, VaultEconomyModule.value)
+
     fun Player.toMemberDTO() = ClanMemberDTO(
         minecraftUUID = uuid,
         minecraftName = name
@@ -39,7 +46,7 @@ class ClanCommandController(private val discordController: DiscordController?) {
     suspend fun createClan(clanTag: String?, clanName: String?, player: Player) = ExceptionHandler.catchSuspend {
         val clanDTO = ClanCreateUseCase.Params(clanTag, clanName, player.toDTO()).run {
             val params = this
-            ClanCreateUseCase(params)
+            clanCreateUseCase(params)
         }
         discordController?.onClanCreated(clanDTO)
         player.sendTranslationMessage("%tag%" to clanTag!!) { successClanCreate }
