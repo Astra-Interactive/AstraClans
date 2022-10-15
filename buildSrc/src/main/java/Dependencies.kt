@@ -15,7 +15,7 @@ object Dependencies {
         const val kaml = "0.46.0"
         const val exposed = "0.38.1"
         const val jdbc = "3.36.0.3"
-        const val astraLibs = "1.9.0"
+        const val astraLibs = "2.0.0"
     }
     object Spigot {
         const val version = "1.19-R0.1-SNAPSHOT"

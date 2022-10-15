@@ -37,14 +37,16 @@ class ClanCreateUseCase(
         ClanMemberDataSource.select(player.minecraftUUID)?.let {
             throw ClanOperationException.AlreadyInClan(player)
         }
-        val playerUUID = UUID.fromString(player.minecraftUUID)
-        val playerBalance = economyProvider?.getBalance(playerUUID) ?: 0.0
-        println("Balance: $playerBalance; required: ${config.economy.clanCreatePurchaseAmount}")
-        if (playerBalance < config.economy.clanCreatePurchaseAmount)
-            throw ClanOperationException.NotEnoughMoney(player)
-        val takeMoneyResult =
-            economyProvider?.takeMoney(playerUUID, config.economy.clanCreatePurchaseAmount.toDouble()) ?: false
-        if (!takeMoneyResult) throw ClanOperationException.NotEnoughMoney(player)
+        if (config.economy.clanCreatePurchaseAmount>0) {
+            val playerUUID = UUID.fromString(player.minecraftUUID)
+            val playerBalance = economyProvider?.getBalance(playerUUID) ?: 0.0
+            println("Balance: $playerBalance; required: ${config.economy.clanCreatePurchaseAmount}")
+            if (playerBalance < config.economy.clanCreatePurchaseAmount)
+                throw ClanOperationException.NotEnoughMoney(player)
+            val takeMoneyResult =
+                economyProvider?.takeMoney(playerUUID, config.economy.clanCreatePurchaseAmount.toDouble()) ?: false
+            if (!takeMoneyResult) throw ClanOperationException.NotEnoughMoney(player)
+        }
         val _clanDTO = ClanDTO(
             clanTag = clanTag,
             clanName = clanName,

@@ -56,10 +56,10 @@ class AstraClans : JavaPlugin() {
         Logger.prefix = "AstraTemplate"
         ExceptionHandler.handler = ExceptionHandlerProvider.value
         eventHandler = EventHandler()
+        reload()
         DatabaseModule.createDatabase("${AstraLibs.instance.dataFolder}${File.separator}clans.db")
         CommandManager()
         AstraClansAPI.playerStatusProvider = PlayerStatusProvider
-
         if (isPluginExists("PlaceholderAPI")) {
             if (PapiExpansions.isRegistered)
                 Logger.warn("PAPI already registered")

@@ -1,7 +1,7 @@
+
 import com.astrainteractive.astraclans.commands.*
 import com.astrainteractive.astraclans.commands.clan.ClanCommand
 import com.astrainteractive.astraclans.commands.clan.ClanCommandController
-import ru.astrainteractive.astralibs.di.Injector.inject
 
 
 /**
@@ -10,7 +10,6 @@ import ru.astrainteractive.astralibs.di.Injector.inject
  * @see Reload
  */
 class CommandManager {
-    val clanCommandController: ClanCommandController = inject()
 
     /**
      * Here you should declare commands for your plugin
@@ -22,7 +21,7 @@ class CommandManager {
     init {
         tabCompleter()
         reload()
-        ClanCommand(clanCommandController)
+        ClanCommand(ClanCommandController)
     }
 
 

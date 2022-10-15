@@ -8,16 +8,17 @@ import com.astrainteractive.astraclans.modules.translation.sendTranslationMessag
 import com.astrainteractive.astraclans.utils.toDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.astrainteractive.astralibs.architecture.Presenter
 import ru.astrainteractive.astralibs.async.BukkitMain
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.di.Injector.inject
-import ru.astrainteractive.astralibs.menu.AstraPlayerMenuUtility
+import ru.astrainteractive.astralibs.menu.IPlayerHolder
 import ru.astrainteractive.astralibs.utils.uuid
 
 
-class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtility, private val view: IFlagView) {
+class FlagInventoryPresenter(private val playerMenuUtility: IPlayerHolder, override val viewState: IFlagView) :
+    Presenter<IFlagView>() {
     val playerClan = AstraClansAPI.getPlayerClan(playerMenuUtility.player.toDTO())
-    val clanCommandController: ClanCommandController = inject()!!
+    val clanCommandController: ClanCommandController = ClanCommandController
     private val _flagList: MutableMap<FlagsEnum, FlagDTO> = playerClan?.flags?.associateBy {
         it.flag
     }?.toMutableMap()?.apply {
@@ -29,15 +30,16 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
     val flagList: List<FlagDTO>
         get() = _flagList.values.toList()
 
-    init {
+    override fun onBinded() {
         if (playerClan == null) {
             playerMenuUtility.player.sendTranslationMessage { notClanMember }
-            view.close()
+            viewState.close()
         } else if (playerClan.leaderUUID != playerMenuUtility.player.uuid) {
             playerMenuUtility.player.sendTranslationMessage { youAreNotLeader }
-            view.close()
+            viewState.close()
         }
-        view.showFlags(flagList)
+        viewState.showFlags(flagList)
+
     }
 
     fun onFlagClicked(index: Int, page: Int, maxPerPage: Int) {
@@ -46,10 +48,11 @@ class FlagInventoryPresenter(private val playerMenuUtility: AstraPlayerMenuUtili
             it.copy(enabled = !it.enabled)
         } ?: return
         PluginScope.launch {
-            val result = clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled) ?: return@launch
+            val result =
+                clanCommandController.setFlag(playerMenuUtility.player, flag.flag, flag.enabled) ?: return@launch
             _flagList[flag.flag] = result
 
-            PluginScope.launch(Dispatchers.BukkitMain) { view.showFlags(flagList) }
+            PluginScope.launch(Dispatchers.BukkitMain) { viewState.showFlags(flagList) }
         }
     }
 

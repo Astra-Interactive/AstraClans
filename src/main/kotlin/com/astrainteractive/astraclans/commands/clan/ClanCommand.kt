@@ -5,6 +5,7 @@ import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
 import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.AstraPermission
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -73,7 +74,7 @@ fun CommandManager.ClanCommand(clanCommandController: ClanCommandController) =
             }
 
             "flags" -> {
-                FlagInventory(sender).open()
+                PluginScope.launch(Dispatchers.IO) { FlagInventory(sender).open() }
             }
         }
     }
