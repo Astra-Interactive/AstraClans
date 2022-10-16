@@ -1,6 +1,5 @@
-
-group = "com.astrainteractive"
-version = "2.4.0"
+group = Dependencies.group
+version = Dependencies.version
 val name = "AstraClans"
 description = "Simple but powerful clans plugin for mincraft servers"
 
@@ -8,9 +7,9 @@ plugins {
     java
     `maven-publish`
     `java-library`
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.serialization") version "1.7.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version Dependencies.Kotlin.version
+    kotlin("plugin.serialization") version Dependencies.Kotlin.version
+    id("com.github.johnrengelman.shadow") version Dependencies.Kotlin.shadow
 }
 java {
     withSourcesJar()
@@ -22,61 +21,50 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven(Dependencies.Repositories.extendedclip)
-    maven(Dependencies.Repositories.spigotmc)
-    maven(Dependencies.Repositories.papermc)
-    maven(Dependencies.Repositories.scarsz)
-    maven(Dependencies.Repositories.dmulloy2)
-    maven(Dependencies.Repositories.essentialsx)
     maven(Dependencies.Repositories.maven2Apache)
+    maven(Dependencies.Repositories.essentialsx)
     maven(Dependencies.Repositories.enginehub)
-    maven(Dependencies.Repositories.maven2)
+    maven(Dependencies.Repositories.spigotmc)
+    maven(Dependencies.Repositories.dmulloy2)
+    maven(Dependencies.Repositories.papermc)
     maven(Dependencies.Repositories.dv8tion)
     maven(Dependencies.Repositories.playpro)
-    maven(Dependencies.Repositories.clojars)
     maven(Dependencies.Repositories.jitpack)
-    maven {
-        url = uri("https://maven.pkg.github.com/Astra-Interactive/AstraLibs")
-        val config = project.getConfig()
-        credentials {
-            username = config.username
-            password = config.token
-        }
-    }
+    maven(Dependencies.Repositories.scarsz)
+    maven(Dependencies.Repositories.maven2)
+    modelEngige(project)
+    astraLibs(project)
+    paperMC(project)
 }
 
 dependencies {
     // Kotlin
-    implementation(Dependencies.Implementation.kotlinGradlePlugin)
+    implementation(Dependencies.Libraries.kotlinGradlePlugin)
     // Coroutines
-    implementation(Dependencies.Implementation.kotlinxCoroutines)
-    implementation(Dependencies.Implementation.kotlinxCoroutinesCore)
+    implementation(Dependencies.Libraries.kotlinxCoroutinesCoreJVM)
+    implementation(Dependencies.Libraries.kotlinxCoroutinesCore)
     // Serialization
-    implementation(Dependencies.Implementation.kotlinxSerialization)
-    implementation(Dependencies.Implementation.kotlinxSerializationJson)
-    implementation(Dependencies.Implementation.kotlinxSerializationYaml)
+    implementation(Dependencies.Libraries.kotlinxSerialization)
+    implementation(Dependencies.Libraries.kotlinxSerializationJson)
+    implementation(Dependencies.Libraries.kotlinxSerializationYaml)
     // AstraLibs
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(Dependencies.Libraries.astraLibsKtxCore)
+    implementation(Dependencies.Libraries.astraLibsSpigotCore)
     // Test
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.5.20")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("com.github.seeseemelk:MockBukkit-v1.18:2.26.0")
-    testImplementation("io.kotest:kotest-runner-junit5:5.3.1")
-    testImplementation("io.kotest:kotest-assertions-core:5.3.1")
     testImplementation(kotlin("test"))
+    testImplementation(Dependencies.Libraries.orgTeting)
     // Spigot dependencies
-    compileOnly(Dependencies.CompileOnly.essentialsX)
-    compileOnly(Dependencies.CompileOnly.paperMC)
-    compileOnly(Dependencies.CompileOnly.spigotApi)
-    compileOnly(Dependencies.CompileOnly.spigot)
-    compileOnly(Dependencies.CompileOnly.protocolLib)
-    compileOnly(Dependencies.CompileOnly.placeholderapi)
-    compileOnly(Dependencies.CompileOnly.worldguard)
-    compileOnly(Dependencies.CompileOnly.discordsrv)
-    compileOnly(Dependencies.CompileOnly.vaultAPI)
-    compileOnly(Dependencies.CompileOnly.coreprotect)
-
-    implementation("ru.astrainteractive.astralibs:ktx-core:${Dependencies.Kotlin.astraLibs}")
-    implementation("ru.astrainteractive.astralibs:spigot-core:${Dependencies.Kotlin.astraLibs}")
+    compileOnly(Dependencies.Libraries.essentialsX)
+    compileOnly(Dependencies.Libraries.paperMC)
+    compileOnly(Dependencies.Libraries.spigot)
+    compileOnly(Dependencies.Libraries.spigotApi)
+    compileOnly(Dependencies.Libraries.protocolLib)
+    compileOnly(Dependencies.Libraries.placeholderapi)
+    compileOnly(Dependencies.Libraries.worldguard)
+    compileOnly(Dependencies.Libraries.discordsrv)
+    compileOnly(Dependencies.Libraries.vaultAPI)
+    compileOnly(Dependencies.Libraries.coreprotect)
+    // Local
     implementation(project(":domain"))
 }
 
@@ -119,12 +107,15 @@ tasks {
 tasks.shadowJar {
     dependencies {
         include(dependency(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", ".aar")))))
-        include(dependency(Dependencies.Implementation.kotlinGradlePlugin))
-        include(dependency(Dependencies.Implementation.kotlinxCoroutines))
-        include(dependency(Dependencies.Implementation.kotlinxCoroutinesCore))
-        include(dependency(Dependencies.Implementation.kotlinxSerialization))
-        include(dependency(Dependencies.Implementation.kotlinxSerializationJson))
-        include(dependency(Dependencies.Implementation.kotlinxSerializationYaml))
+        // Kotlin
+        include(dependency(Dependencies.Libraries.kotlinGradlePlugin))
+        // Coroutines
+        include(dependency(Dependencies.Libraries.kotlinxCoroutinesCoreJVM))
+        include(dependency(Dependencies.Libraries.kotlinxCoroutinesCore))
+        // Serialization
+        include(dependency(Dependencies.Libraries.kotlinxSerialization))
+        include(dependency(Dependencies.Libraries.kotlinxSerializationJson))
+        include(dependency(Dependencies.Libraries.kotlinxSerializationYaml))
     }
     isReproducibleFileOrder = true
     mergeServiceFiles()
@@ -136,6 +127,5 @@ tasks.shadowJar {
         exclude(dependency("org.jetbrains.exposed:exposed-jdbc:${Dependencies.Kotlin.exposed}"))
         exclude(dependency("org.jetbrains.exposed:exposed-dao:${Dependencies.Kotlin.exposed}"))
     }
-    destinationDirectory.set(File("D:\\Minecraft Servers\\1_19\\paper\\plugins"))
-//    destinationDirectory.set(File("/media/makeevrserg/Новый том/Servers/Server/plugins"))
+    destinationDirectory.set(File(Dependencies.destinationDirectoryPath))
 }

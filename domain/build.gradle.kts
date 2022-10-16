@@ -2,13 +2,13 @@ plugins {
     java
     `maven-publish`
     `java-library`
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.serialization") version "1.7.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version Dependencies.Kotlin.version
+    kotlin("plugin.serialization") version Dependencies.Kotlin.version
+    id("com.github.johnrengelman.shadow") version Dependencies.Kotlin.shadow
 }
 
-group = "com.astrainteractive"
-version = "2.4.0"
+group = Dependencies.group
+version = Dependencies.version
 java {
     withSourcesJar()
     withJavadocJar()
@@ -17,34 +17,26 @@ java {
 }
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/Astra-Interactive/AstraLibs")
-        val config = project.getConfig()
-        credentials {
-            username = config.username
-            password = config.token
-        }
-    }
+    astraLibs(project)
 }
 
 dependencies {
-    implementation(Dependencies.Implementation.jdbc)
-    implementation(Dependencies.Implementation.exposedJavaTime)
-    implementation(Dependencies.Implementation.exposedJDBC)
-    implementation(Dependencies.Implementation.exposedCORD)
-    implementation(Dependencies.Implementation.exposedDAO)
+    // Database
+    implementation(Dependencies.Libraries.jdbc)
+    implementation(Dependencies.Libraries.exposedJavaTime)
+    implementation(Dependencies.Libraries.exposedJDBC)
+    implementation(Dependencies.Libraries.exposedCORD)
+    implementation(Dependencies.Libraries.exposedDAO)
     // Serialization
-    implementation(Dependencies.Implementation.kotlinxSerialization)
-    implementation(Dependencies.Implementation.kotlinxSerializationJson)
-    implementation(Dependencies.Implementation.kotlinxSerializationYaml)
+    implementation(Dependencies.Libraries.kotlinxSerialization)
+    implementation(Dependencies.Libraries.kotlinxSerializationJson)
+    implementation(Dependencies.Libraries.kotlinxSerializationYaml)
     // AstraLibs
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-
+    implementation(Dependencies.Libraries.astraLibsKtxCore)
+    implementation(Dependencies.Libraries.astraLibsSpigotCore)
+    // Test
     testImplementation(kotlin("test"))
-    testImplementation("org.testng:testng:7.1.0")
-
-    implementation("ru.astrainteractive.astralibs:ktx-core:${Dependencies.Kotlin.astraLibs}")
-    implementation("ru.astrainteractive.astralibs:spigot-core:${Dependencies.Kotlin.astraLibs}")
+    testImplementation(Dependencies.Libraries.orgTeting)
 
 }
 
