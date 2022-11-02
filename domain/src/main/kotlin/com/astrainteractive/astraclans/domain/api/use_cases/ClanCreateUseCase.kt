@@ -4,7 +4,6 @@ import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
-import com.astrainteractive.astraclans.domain.di.IConfigProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
@@ -13,11 +12,9 @@ import java.util.*
 
 
 class ClanCreateUseCase(
-    private val configProvider: IConfigProvider,
+    private val config: PluginConfig,
     private val economyProvider: IEconomyProvider?
 ) : UseCase<ClanDTO, ClanCreateUseCase.Params>() {
-    val config: PluginConfig
-        get() = configProvider.value
 
     class Params(
         val clanTag: String?,

@@ -1,28 +1,23 @@
 package com.astrainteractive.astraclans.commands.clan
 
 import com.astrainteractive.astraclans.domain.api.use_cases.*
-import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
-import com.astrainteractive.astraclans.modules.ConfigProvider
-import com.astrainteractive.astraclans.modules.VaultEconomyModule
-import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
+import com.astrainteractive.astraclans.modules.ClanCreateUseCaseModule
+import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
+import com.astrainteractive.astraclans.utils.toMemberDTO
 import org.bukkit.entity.Player
-import ru.astrainteractive.astralibs.utils.uuid
+import ru.astrainteractive.astralibs.di.getValue
 
 object ClanCommandController {
     private val discordController: DiscordController?
         get() = DiscordController
 
-    val clanCreateUseCase: ClanCreateUseCase
-        get() = ClanCreateUseCase(ConfigProvider, VaultEconomyModule.value)
+    private val clanCreateUseCase by ClanCreateUseCaseModule
 
-    fun Player.toMemberDTO() = ClanMemberDTO(
-        minecraftUUID = uuid,
-        minecraftName = name
-    )
+
 
     //aclan leave
     suspend fun leave(sender: Player) = ExceptionHandler.catchSuspend {

@@ -4,7 +4,7 @@ import com.astrainteractive.astraclans.commands.clan.ClanCommandController
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
-import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
+import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

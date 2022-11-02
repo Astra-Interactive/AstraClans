@@ -1,8 +1,9 @@
-package com.astrainteractive.astraclans.modules.translation
+package com.astrainteractive.astraclans.utils
 
 import com.astrainteractive.astraclans.modules.TranslationProvider
 import org.bukkit.command.CommandSender
 import ru.astrainteractive.astralibs.file_manager.FileManager
+import ru.astrainteractive.astralibs.utils.BaseTranslation
 
 fun CommandSender.sendTranslationMessage(vararg args: Pair<String, Any>, msg: PluginTranslation.() -> String) {
     var msg = msg(TranslationProvider.value)
@@ -13,216 +14,216 @@ fun CommandSender.sendTranslationMessage(vararg args: Pair<String, Any>, msg: Pl
 /**
  * All translation stored here
  */
-class PluginTranslation(
-    override val fileManager: FileManager = FileManager("translations.yml")
-) : BaseTranslation() {
+class PluginTranslation: BaseTranslation() {
+    override val translationFile: FileManager = FileManager("translations.yml")
+
     object Colors {
         const val negative = "#ca1e1b"
         const val positive = "#2aca1b"
         const val default = "#1b6aca"
     }
     //General
-    val prefix: String = getHEXString("general.prefix", "${Colors.positive}[EmpireItems]")
-    val reload: String = getHEXString("general.reload", "${Colors.default}Перезагрузка плагина")
+    val prefix: String = translationValue("general.prefix", "${Colors.positive}[EmpireItems]")
+    val reload: String = translationValue("general.reload", "${Colors.default}Перезагрузка плагина")
     val reloadComplete: String =
-        getHEXString("general.reload_complete", "${Colors.positive}Перезагрузка успешно завершена")
+        translationValue("general.reload_complete", "${Colors.positive}Перезагрузка успешно завершена")
     val noPermission: String =
-        getHEXString("general.no_permission", "${Colors.negative}У вас нет прав!")
-    val notPlayer = translationDetails {
-        path = "general.not_a_player"
+        translationValue("general.no_permission", "${Colors.negative}У вас нет прав!")
+    val notPlayer = translationValue(
+        path = "general.not_a_player",
         default = "${Colors.negative}Вы не игрок"
-    }
-    val playerNotOnline = translationDetails {
-        path = "general.player_not_online"
+    )
+    val playerNotOnline = translationValue(
+        path = "general.player_not_online",
         default = "${Colors.negative}Игрок не в сети"
-    }
-    val playerAlreadyInvited = translationDetails {
-        path = "general.player_already_invited"
+    )
+    val playerAlreadyInvited = translationValue(
+        path = "general.player_already_invited",
         default = "${Colors.negative}Игрок уже приглашен"
-    }
-    val youNotInvited = translationDetails {
-        path = "general.not_invited"
+    )
+    val youNotInvited = translationValue(
+        path = "general.not_invited",
         default = "${Colors.negative}Вы не приглашены"
-    }
-    val joinedClan = translationDetails {
-        path = "general.joined_clan"
+    )
+    val joinedClan = translationValue(
+        path = "general.joined_clan",
         default = "${Colors.positive}Вы вступили в клан %clan%"
-    }
+    )
 
-    val playerInvited = translationDetails {
-        path = "general.player_invited"
+    val playerInvited = translationValue(
+        path = "general.player_invited",
         default = "${Colors.positive}Игрок %player% приглашен в клан"
-    }
-    val clanNotFound = translationDetails {
-        path = "general.clan_not_found"
+    )
+    val clanNotFound = translationValue(
+        path = "general.clan_not_found",
         default = "${Colors.negative}Клан %clan% не найден"
-    }
+    )
 
     // Create clan
-    val noClanTagProvided = translationDetails {
-        path = "clan.no_tag_provided"
+    val noClanTagProvided = translationValue(
+        path = "clan.no_tag_provided",
         default = "${Colors.negative}Вы не ввели тэг клана /aclan create <tag> <name>"
-    }
-    val noClanNameProvided = translationDetails {
-        path = "clan.no_name_provided"
+    )
+    val noClanNameProvided = translationValue(
+        path = "clan.no_name_provided",
         default = "${Colors.negative}Вы не ввели имя клана /aclan create <tag> <name>"
-    }
-    val playerAlreadyInClan = translationDetails {
-        path = "clan.player_already_in_clan"
+    )
+    val playerAlreadyInClan = translationValue(
+        path = "clan.player_already_in_clan",
         default = "${Colors.negative}У вас уже есть клан"
-    }
-    val notEnoguhMoney = translationDetails {
-        path = "clan.not_enough_money"
+    )
+    val notEnoguhMoney = translationValue(
+        path = "clan.not_enough_money",
         default = "${Colors.negative}Недостаточно денег"
-    }
-    val errorInClanCreating = translationDetails {
-        path = "clan.create_clan_error"
+    )
+    val errorInClanCreating = translationValue(
+        path = "clan.create_clan_error",
         default = "${Colors.negative}Не удалось создать клан"
-    }
-    val databaseError = translationDetails {
-        path = "database.error"
+    )
+    val databaseError = translationValue(
+        path = "database.error",
         default = "${Colors.negative}Ошибка базы данных"
-    }
-    val notClanMember = translationDetails {
-        path = "clan.not_clan_member"
+    )
+    val notClanMember = translationValue(
+        path = "clan.not_clan_member",
         default = "${Colors.negative}Вы не состоите в клане"
-    }
-    val successDisband = translationDetails {
-        path = "clan.disband_success"
+    )
+    val successDisband = translationValue(
+        path = "clan.disband_success",
         default = "${Colors.positive}Клан успешно распущен"
-    }
-    val successLeave = translationDetails {
-        path = "clan.leave_success"
+    )
+    val successLeave = translationValue(
+        path = "clan.leave_success",
         default = "${Colors.positive}Вы покинули клан"
-    }
-    val leaderCantLeaveClan = translationDetails {
-        path = "clan.leader_cant_leave"
+    )
+    val leaderCantLeaveClan = translationValue(
+        path = "clan.leader_cant_leave",
         default = "${Colors.negative}Лидер не может покинуть клан"
-    }
-    val youAreLeader = translationDetails {
-        path = "clan.you_leader"
+    )
+    val youAreLeader = translationValue(
+        path = "clan.you_leader",
         default = "${Colors.negative}Вы лидер клана. Это действие вам недоступно"
-    }
-    val successClanCreate = translationDetails {
-        path = "clan.create_clan_success"
+    )
+    val successClanCreate = translationValue(
+        path = "clan.create_clan_success",
         default = "${Colors.positive}Клан %tag% успешно создан"
-    }
-    val youAreNotLeader = translationDetails {
-        path = "clan.you_are_not_leader"
+    )
+    val youAreNotLeader = translationValue(
+        path = "clan.you_are_not_leader",
         default = "${Colors.negative}Вы не лидер клана"
-    }
+    )
 
-    val flagChanged = translationDetails {
-        path = "clan.flag_changed"
+    val flagChanged = translationValue(
+        path = "clan.flag_changed",
         default = "${Colors.positive}Флаг %flag% изменен на %value%"
-    }
-    val chunkAlreadyClaimed = translationDetails {
-        path = "clan.chunk_already_claimed"
+    )
+    val chunkAlreadyClaimed = translationValue(
+        path = "clan.chunk_already_claimed",
         default = "${Colors.negative}Этот чанк уже занят"
-    }
-    val chunkClaimError = translationDetails {
-        path = "clan.chunk_claim_error"
+    )
+    val chunkClaimError = translationValue(
+        path = "clan.chunk_claim_error",
         default = "${Colors.negative}Не удалось захватить эти земли"
-    }
-    val chunkClaimSuccess = translationDetails {
-        path = "clan.chunk_claim_success"
+    )
+    val chunkClaimSuccess = translationValue(
+        path = "clan.chunk_claim_success",
         default = "${Colors.positive}Земли захвачены"
-    }
-    val noFlagProvided = translationDetails {
-        path = "clan.no_flag_provided"
+    )
+    val noFlagProvided = translationValue(
+        path = "clan.no_flag_provided",
         default = "${Colors.negative}Введите флаг"
-    }
-    val previous = translationDetails {
-        path = "gui.back"
+    )
+    val previous = translationValue(
+        path = "gui.back",
         default = "${Colors.default}Раньше"
-    }
-    val next = translationDetails {
-        path = "gui.next"
+    )
+    val next = translationValue(
+        path = "gui.next",
         default = "${Colors.default}Дальше"
-    }
-    val back = translationDetails {
-        path = "gui.back"
+    )
+    val back = translationValue(
+        path = "gui.back",
         default = "${Colors.default}Назад"
-    }
+    )
 
     // Flags
 
-    val flagTrue = translationDetails(
+    val flagTrue = translationValue(
         path = "clan.flag.values.true",
         default = "${Colors.positive}Вкл."
     )
 
-    val flagFalse = translationDetails(
+    val flagFalse = translationValue(
         path = "clan.flag.values.false",
         default = "${Colors.negative}Откл."
     )
 
-    val flagIsEnabled = translationDetails(
+    val flagIsEnabled = translationValue(
         path = "clan.flag.values.value",
         default = "${Colors.default}Значение: "
     )
 
-    val flagBlockBreak = translationDetails(
+    val flagBlockBreak = translationValue(
         path = "clan.flag.block_break",
         default = "${Colors.default}Запремт ломать блоки"
     )
-    val flagBlockPlace = translationDetails(
+    val flagBlockPlace = translationValue(
         path = "clan.flag.block_place",
         default = "${Colors.default}Запрет ставить блоки"
     )
-    val flagBlockIgnite = translationDetails(
+    val flagBlockIgnite = translationValue(
         path = "clan.flag.block_ignite",
         default = "${Colors.default}Запрет огня"
     )
-    val flagCreatureSpawn = translationDetails(
+    val flagCreatureSpawn = translationValue(
         path = "clan.flag.creature_spawn",
         default = "${Colors.default}Запрет спавна животных"
     )
-    val flagBlockGrowDeny = translationDetails(
+    val flagBlockGrowDeny = translationValue(
         path = "clan.flag.block_grow",
         default = "${Colors.default}Запрет роста"
     )
-    val flagBlockExplode = translationDetails(
+    val flagBlockExplode = translationValue(
         path = "clan.flag.block_explode",
         default = "${Colors.default}Запрет взрывов"
     )
-    val flagBlockPiston = translationDetails(
+    val flagBlockPiston = translationValue(
         path = "clan.flag.block_piston",
         default = "${Colors.default}Запрет прошней"
     )
-    val flagBlockDamage = translationDetails(
+    val flagBlockDamage = translationValue(
         path = "clan.flag.block_damage",
         default = "${Colors.default}Запрет урона блокам"
     )
-    val flagBlockInteract = translationDetails(
+    val flagBlockInteract = translationValue(
         path = "clan.flag.block_interact",
         default = "${Colors.default}Запрет взаимодействия с блоками"
     )
-    val flagBlockForm = translationDetails(
+    val flagBlockForm = translationValue(
         path = "clan.flag.block_form",
         default = "${Colors.default}Запрет формы блоков"
     )
-    val flagBlockFertilize = translationDetails(
+    val flagBlockFertilize = translationValue(
         path = "clan.flag.block_fertilize",
         default = "${Colors.default}Запрет Fertilize"
     )
-    val flagSignChange = translationDetails(
+    val flagSignChange = translationValue(
         path = "clan.flag.sign_change",
         default = "${Colors.default}Запрет смены табличек"
     )
-    val flagBucketEmpty = translationDetails(
+    val flagBucketEmpty = translationValue(
         path = "clan.flag.bucket_empty",
         default = "${Colors.default}Запрет опустошения ведра"
     )
-    val flagBucketFill = translationDetails(
+    val flagBucketFill = translationValue(
         path = "clan.flag.bucket_fill",
         default = "${Colors.default}Запрет наполнения ведра"
     )
-    val flagHangingPlace = translationDetails(
+    val flagHangingPlace = translationValue(
         path = "clan.flag.hanging_place",
         default = "${Colors.default}Запрет вешанья"
     )
-    val flagHangingBreak = translationDetails(
+    val flagHangingBreak = translationValue(
         path = "clan.flag.hanging_break",
         default = "${Colors.default}Запрет снимания повешенных объектов"
     )

@@ -3,8 +3,8 @@ package com.astrainteractive.astraclans.commands.clan
 import CommandManager
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
-import com.astrainteractive.astraclans.modules.translation.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.AstraPermission
+import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit

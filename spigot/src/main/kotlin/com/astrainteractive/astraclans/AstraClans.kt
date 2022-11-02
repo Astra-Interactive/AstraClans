@@ -6,10 +6,7 @@ import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
 import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
 import com.astrainteractive.astraclans.events.EventHandler
-import com.astrainteractive.astraclans.modules.ConfigProvider
-import com.astrainteractive.astraclans.modules.ExceptionHandlerProvider
-import com.astrainteractive.astraclans.modules.Files
-import com.astrainteractive.astraclans.modules.TranslationProvider
+import com.astrainteractive.astraclans.modules.*
 import com.astrainteractive.astraclans.utils.PapiExpansions
 import com.astrainteractive.astraclans.utils.PlayerStatusProvider
 import com.astrainteractive.astraclans.utils.isPluginExists
@@ -38,14 +35,6 @@ class AstraClans : JavaPlugin() {
      * Class for handling all of your events
      */
     private lateinit var eventHandler: EventHandler
-
-    private var isStartedBefore = false
-    private fun onInitialStart(block: () -> Unit) {
-        if (isStartedBefore) return
-        isStartedBefore = true
-        block()
-
-    }
 
 
     /**
@@ -77,8 +66,9 @@ class AstraClans : JavaPlugin() {
 
     fun reload() {
         TranslationProvider.reload()
-        ConfigProvider.reload()
         Files.configFile.reload()
+        ConfigProvider.reload()
+        ClanCreateUseCaseModule.reload()
     }
 
     /**

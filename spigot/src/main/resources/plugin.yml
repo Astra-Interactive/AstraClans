@@ -1,4 +1,4 @@
-main: com.astrainteractive.astraclans.AstraClans
+main: AstraClans
 prefix: AstraClans
 description: '${description}'
 name: '${name}'

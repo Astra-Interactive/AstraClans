@@ -4,7 +4,6 @@ import com.astrainteractive.astraclans.domain.dto.*
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum.*
 import com.astrainteractive.astraclans.domain.dto.mapping.NOT_EXISTS_ID
 import com.astrainteractive.astraclans.modules.TranslationProvider
-import com.astrainteractive.astraclans.modules.translation.PluginTranslation
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Material
@@ -15,6 +14,10 @@ import org.bukkit.inventory.meta.ItemMeta
 import ru.astrainteractive.astralibs.utils.uuid
 import java.util.*
 
+fun Player.toMemberDTO() = ClanMemberDTO(
+    minecraftUUID = uuid,
+    minecraftName = name
+)
 val ClanDTO.offlineLeader: OfflinePlayer
     get() = Bukkit.getOfflinePlayer(UUID.fromString(this.leaderUUID))
 val ClanDTO.onlineLeader: Player?

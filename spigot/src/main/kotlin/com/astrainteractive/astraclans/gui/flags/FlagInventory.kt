@@ -2,13 +2,13 @@ package com.astrainteractive.astraclans.gui.flags
 
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.modules.TranslationProvider
-import com.astrainteractive.astraclans.modules.translation.PluginTranslation
 import com.astrainteractive.astraclans.utils.toItemStack
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
+import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.menu.AstraMenuSize
 import ru.astrainteractive.astralibs.menu.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.IInventoryButton
@@ -18,8 +18,7 @@ import ru.astrainteractive.astralibs.menu.PaginatedMenu
 class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
     override val playerMenuUtility = DefaultPlayerHolder(player)
     private val presenter: FlagInventoryPresenter = FlagInventoryPresenter(playerMenuUtility, this)
-    val translation: PluginTranslation
-        get() = TranslationProvider.value
+    val translation by TranslationProvider
 
     override val maxItemsAmount: Int
         get() = presenter.flagList.size
@@ -34,6 +33,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
                 it.setDisplayName(translation.next)
             }
         }
+        override val onClick: (e: InventoryClickEvent) -> Unit = {}
     }
     override val prevPageButton: IInventoryButton = object : IInventoryButton {
         override val index: Int = 54 - 9
@@ -42,6 +42,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
                 it.setDisplayName(translation.previous)
             }
         }
+        override val onClick: (e: InventoryClickEvent) -> Unit = {}
     }
     override val backPageButton: IInventoryButton = object : IInventoryButton {
         override val index: Int = 54 - 5
@@ -50,6 +51,7 @@ class FlagInventory(player: Player) : PaginatedMenu(), IFlagView {
                 it.setDisplayName(translation.back)
             }
         }
+        override val onClick: (e: InventoryClickEvent) -> Unit = {}
     }
     override var page: Int = 0
     override fun onCreated() {

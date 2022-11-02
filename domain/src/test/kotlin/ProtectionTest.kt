@@ -5,13 +5,13 @@ import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.api.use_cases.ClaimChunkUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
 import com.astrainteractive.astraclans.domain.api.use_cases.SetClanFlagUseCase
+import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.di.IPlayerStatusProvider
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import kotlinx.coroutines.runBlocking
-import mock.MockConfigProvider
 import mock.MockEconomyProvider
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -23,7 +23,7 @@ class ProtectionTest {
     var clanDTO = DTO.ClanDTO.copy(leaderName = clanLeaderDTO.minecraftName, leaderUUID = clanLeaderDTO.minecraftUUID)
     var clanLandDTO = DTO.LandDTO
     val freeLandDTO = DTO.LandDTO
-    val clanCreateUseCase = ClanCreateUseCase(MockConfigProvider,MockEconomyProvider)
+    val clanCreateUseCase = ClanCreateUseCase(PluginConfig(),MockEconomyProvider)
 
     @BeforeTest
     fun prepare() {

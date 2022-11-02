@@ -5,6 +5,7 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.and
 
 object Clan : IntIdTable() {
     val leaderName: Column<String> = text("minecraft_name")
@@ -15,7 +16,12 @@ object Clan : IntIdTable() {
         uniqueIndex(leaderName, leaderUUID)
     }
 }
+fun aaa(){
 
+    ClanDAO.find {
+        Clan.clanName.eq("aaa").and(Clan.clanTAG.eq("Tag"))
+    }
+}
 class ClanDAO(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<ClanDAO>(Clan)
 

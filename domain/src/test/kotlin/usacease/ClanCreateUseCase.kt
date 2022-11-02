@@ -3,10 +3,10 @@ package usacease
 import REAL_DB
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.use_cases.ClanCreateUseCase
+import com.astrainteractive.astraclans.domain.config.PluginConfig
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
 import kotlinx.coroutines.runBlocking
-import mock.MockConfigProvider
 import mock.MockEconomyProvider
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -16,7 +16,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class ClanCreateUseCase {
-    val clanCreateUseCase = ClanCreateUseCase(MockConfigProvider, MockEconomyProvider)
+    val clanCreateUseCase = ClanCreateUseCase(PluginConfig(), MockEconomyProvider)
     @BeforeTest
     fun prepare() {
         DatabaseModule.createDatabase(REAL_DB)
