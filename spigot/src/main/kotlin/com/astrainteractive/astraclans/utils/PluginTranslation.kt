@@ -59,6 +59,10 @@ class PluginTranslation: BaseTranslation() {
         default = "${Colors.negative}Клан %clan% не найден"
     )
 
+    val actionBannedInClanLand = translationValue(
+        path = "clan.action_banned_in_clan_land",
+        default = "${Colors.negative}Действие заблокировано флагами клана на этой территории"
+    )
     // Create clan
     val noClanTagProvided = translationValue(
         path = "clan.no_tag_provided",

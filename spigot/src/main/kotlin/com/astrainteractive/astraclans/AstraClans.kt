@@ -43,6 +43,7 @@ class AstraClans : JavaPlugin() {
     override fun onEnable() {
         AstraLibs.rememberPlugin(this)
         Logger.prefix = "AstraTemplate"
+
         ExceptionHandler.handler = ExceptionHandlerProvider.value
         eventHandler = EventHandler()
         reload()

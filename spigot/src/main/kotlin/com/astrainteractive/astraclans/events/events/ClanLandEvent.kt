@@ -3,8 +3,8 @@ package com.astrainteractive.astraclans.events.events
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.events.events.debounce.*
-import org.bukkit.Location
-import org.bukkit.Material
+import com.astrainteractive.astraclans.utils.ClanExceptionHandler.toPlayer
+import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
@@ -40,20 +40,10 @@ class ClanLandEvent {
                 flag = key.flag
             )
         }
-    }
+        if (event?.isCancelled == true){
+            key.player.toPlayer()?.sendTranslationMessage { actionBannedInClanLand }
 
-    fun replaceBlocks(location: Location) {
-        for (x in 0..32) {
-            val xLocation = location.clone().add(x.toDouble(), 0.0, 0.0)
-            for (y in 0..32) {
-                val yLocation = xLocation.clone().add(0.0, y.toDouble(), 0.0)
-                for (z in 0..32) {
-                    val zLocation = yLocation.clone().add(0.0, 0.0, z.toDouble())
-                    zLocation.block.type = Material.GLOWSTONE
-                }
-            }
         }
-
     }
 
     //-------------------------------------------------------------------------

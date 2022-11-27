@@ -1,13 +1,12 @@
 package com.astrainteractive.astraclans.events.events.debounce
 
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
+import com.google.common.cache.LoadingCache
+import org.bukkit.event.Cancellable
+import org.bukkit.event.Event
 import ru.astrainteractive.astralibs.utils.catching
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit
 
 
 
