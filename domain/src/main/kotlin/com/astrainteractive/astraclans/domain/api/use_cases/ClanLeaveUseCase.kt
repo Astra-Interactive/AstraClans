@@ -6,8 +6,9 @@ import com.astrainteractive.astraclans.domain.datasource.ClanMemberDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import ru.astrainteractive.astralibs.domain.IUseCase
 
-object ClanLeaveUseCase : UseCase<ClanDTO, ClanLeaveUseCase.Param>() {
+object ClanLeaveUseCase : IUseCase<ClanDTO, ClanLeaveUseCase.Param> {
     class Param(val memberDTO: ClanMemberDTO)
 
     override suspend fun run(params: Param): ClanDTO {

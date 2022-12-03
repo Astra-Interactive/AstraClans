@@ -6,8 +6,9 @@ import com.astrainteractive.astraclans.domain.datasource.LandDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.LandDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import ru.astrainteractive.astralibs.domain.IUseCase
 
-object ClaimChunkUseCase : UseCase<LandDTO, ClaimChunkUseCase.Params>() {
+object ClaimChunkUseCase : IUseCase<LandDTO, ClaimChunkUseCase.Params> {
     class Params(val memberDTO: ClanMemberDTO, val landDTO: LandDTO)
 
     override suspend fun run(params: Params): LandDTO {

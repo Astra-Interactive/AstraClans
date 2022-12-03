@@ -6,8 +6,9 @@ import com.astrainteractive.astraclans.domain.datasource.FlagDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import ru.astrainteractive.astralibs.domain.IUseCase
 
-object SetClanFlagUseCase : UseCase<FlagDTO, SetClanFlagUseCase.Params>() {
+object SetClanFlagUseCase : IUseCase<FlagDTO, SetClanFlagUseCase.Params> {
     class Params(val memberDTO: ClanMemberDTO, val flagDTO: FlagDTO)
 
     override suspend fun run(params: Params): FlagDTO {

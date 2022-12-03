@@ -7,8 +7,9 @@ import com.astrainteractive.astraclans.domain.datasource.PendingInviteDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanDTO
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import ru.astrainteractive.astralibs.domain.IUseCase
 
-object ClanJoinUseCase : UseCase<ClanJoinUseCase.Response, ClanJoinUseCase.Params>() {
+object ClanJoinUseCase : IUseCase<ClanJoinUseCase.Response, ClanJoinUseCase.Params> {
     class Params(val clanTAG: String, val memberDTO: ClanMemberDTO)
     class Response(val clanDTO: ClanDTO,val memberDTO: ClanMemberDTO)
     override suspend fun run(params: Params): Response {

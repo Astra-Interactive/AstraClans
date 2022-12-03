@@ -3,8 +3,9 @@ package com.astrainteractive.astraclans.commands.clan
 import com.astrainteractive.astraclans.domain.api.use_cases.*
 import com.astrainteractive.astraclans.domain.dto.FlagDTO
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
-import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
+import com.astrainteractive.astraclans.domain.exception.handle
 import com.astrainteractive.astraclans.modules.ClanCreateUseCaseModule
+import com.astrainteractive.astraclans.utils.ClanExceptionHandler
 import com.astrainteractive.astraclans.utils.sendTranslationMessage
 import com.astrainteractive.astraclans.utils.toDTO
 import com.astrainteractive.astraclans.utils.toMemberDTO
@@ -20,7 +21,7 @@ object ClanCommandController {
 
 
     //aclan leave
-    suspend fun leave(sender: Player) = ExceptionHandler.catchSuspend {
+    suspend fun leave(sender: Player) = ClanExceptionHandler.handle {
         val clanDTO = ClanLeaveUseCase.Param(sender.toDTO()).run {
             ClanLeaveUseCase(this@run)
         }
@@ -29,7 +30,7 @@ object ClanCommandController {
     }
 
     // aclan disband
-    suspend fun disband(sender: Player) = ExceptionHandler.catchSuspend {
+    suspend fun disband(sender: Player) = ClanExceptionHandler.handle {
         val clanDTO = ClanDisbandUseCase.Param(sender.toDTO()).run {
             ClanDisbandUseCase(this@run)
         }
@@ -38,17 +39,17 @@ object ClanCommandController {
     }
 
     // aclan create <tag> <name>
-    suspend fun createClan(clanTag: String?, clanName: String?, player: Player) = ExceptionHandler.catchSuspend {
+    suspend fun createClan(clanTag: String?, clanName: String?, player: Player) = ClanExceptionHandler.handle {
         val clanDTO = ClanCreateUseCase.Params(clanTag, clanName, player.toDTO()).run {
             val params = this
             clanCreateUseCase(params)
         }
         discordController?.onClanCreated(clanDTO)
-        player.sendTranslationMessage("%tag%" to clanTag!!) { successClanCreate }
+        player.sendTranslationMessage { successClanCreate(clanTag ?: "-") }
     }
 
     // aclan claim
-    suspend fun clanClaim(player: Player) = ExceptionHandler.catchSuspend {
+    suspend fun clanClaim(player: Player) = ClanExceptionHandler.handle {
         val result = ClaimChunkUseCase.Params(player.toDTO(), player.chunk.toDTO()).run {
             val params = this
             ClaimChunkUseCase(params)
@@ -57,10 +58,10 @@ object ClanCommandController {
     }
 
     // aclan invite <player>
-    suspend fun invite(sender: Player, player: Player?) = ExceptionHandler.catchSuspend {
+    suspend fun invite(sender: Player, player: Player?) = ClanExceptionHandler.handle {
         player ?: run {
             sender.sendTranslationMessage { playerNotOnline }
-            return@catchSuspend
+            return@handle
         }
         val leaderDTO = sender.toMemberDTO()
         val memberDTO = player.toMemberDTO()
@@ -68,15 +69,15 @@ object ClanCommandController {
             val params = this
             InvitePlayerUseCase(params)
         }
-        sender.sendTranslationMessage("%player%" to player.name) { playerInvited }
+        sender.sendTranslationMessage{ playerInvited(player.name) }
     }
 
 
     // aclan join <tag>
-    suspend fun join(sender: Player, clan: String?) = ExceptionHandler.catchSuspend {
+    suspend fun join(sender: Player, clan: String?) = ClanExceptionHandler.handle {
         clan ?: run {
-            sender.sendTranslationMessage("%clan%" to (clan ?: "-")) { clanNotFound }
-            return@catchSuspend
+            sender.sendTranslationMessage{ clanNotFound(clan ?: "-") }
+            return@handle
         }
         val memberDTO = sender.toMemberDTO()
         val result = ClanJoinUseCase.Params(clan, memberDTO).run {
@@ -84,7 +85,7 @@ object ClanCommandController {
             ClanJoinUseCase(params)
         }
         discordController?.onMemberJoined(result.clanDTO, result.memberDTO)
-        sender.sendTranslationMessage("%clan%" to clan) { joinedClan }
+        sender.sendTranslationMessage { joinedClan(clan) }
     }
 
     // aclan setflag <flag> [value]
@@ -98,7 +99,7 @@ object ClanCommandController {
             val params = this
             SetClanFlagUseCase(params)
         }
-        player.sendTranslationMessage("%flag%" to flag.name, "%value%" to value) { flagChanged }
+        player.sendTranslationMessage { flagChanged(flag.name,value) }
         return result
     }
 }

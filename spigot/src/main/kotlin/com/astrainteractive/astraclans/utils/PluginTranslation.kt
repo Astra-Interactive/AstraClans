@@ -1,20 +1,13 @@
 package com.astrainteractive.astraclans.utils
 
-import com.astrainteractive.astraclans.modules.TranslationProvider
-import org.bukkit.command.CommandSender
 import ru.astrainteractive.astralibs.file_manager.FileManager
 import ru.astrainteractive.astralibs.utils.BaseTranslation
 
-fun CommandSender.sendTranslationMessage(vararg args: Pair<String, Any>, msg: PluginTranslation.() -> String) {
-    var msg = msg(TranslationProvider.value)
-    args.forEach { msg = msg.replace(it.first, it.second.toString()) }
-    sendMessage(msg)
-}
 
 /**
  * All translation stored here
  */
-class PluginTranslation: BaseTranslation() {
+class PluginTranslation : BaseTranslation() {
     override val translationFile: FileManager = FileManager("translations.yml")
 
     object Colors {
@@ -22,6 +15,7 @@ class PluginTranslation: BaseTranslation() {
         const val positive = "#2aca1b"
         const val default = "#1b6aca"
     }
+
     //General
     val prefix: String = translationValue("general.prefix", "${Colors.positive}[EmpireItems]")
     val reload: String = translationValue("general.reload", "${Colors.default}Перезагрузка плагина")
@@ -45,24 +39,32 @@ class PluginTranslation: BaseTranslation() {
         path = "general.not_invited",
         default = "${Colors.negative}Вы не приглашены"
     )
-    val joinedClan = translationValue(
+    private val joinedClan = translationValue(
         path = "general.joined_clan",
         default = "${Colors.positive}Вы вступили в клан %clan%"
     )
 
-    val playerInvited = translationValue(
+    fun joinedClan(tag: String) = joinedClan.replace("%clan%", tag)
+
+    private val playerInvited = translationValue(
         path = "general.player_invited",
         default = "${Colors.positive}Игрок %player% приглашен в клан"
     )
-    val clanNotFound = translationValue(
+
+    fun playerInvited(playerName: String) = playerInvited.replace("%player%", playerName)
+
+    private val clanNotFound = translationValue(
         path = "general.clan_not_found",
         default = "${Colors.negative}Клан %clan% не найден"
     )
+
+    fun clanNotFound(clanTag: String) = clanNotFound.replace("%clan%", clanTag)
 
     val actionBannedInClanLand = translationValue(
         path = "clan.action_banned_in_clan_land",
         default = "${Colors.negative}Действие заблокировано флагами клана на этой территории"
     )
+
     // Create clan
     val noClanTagProvided = translationValue(
         path = "clan.no_tag_provided",
@@ -108,19 +110,25 @@ class PluginTranslation: BaseTranslation() {
         path = "clan.you_leader",
         default = "${Colors.negative}Вы лидер клана. Это действие вам недоступно"
     )
-    val successClanCreate = translationValue(
+    private val successClanCreate = translationValue(
         path = "clan.create_clan_success",
         default = "${Colors.positive}Клан %tag% успешно создан"
     )
+
+    fun successClanCreate(clanTag: String) = successClanCreate.replace("%tag%", clanTag)
     val youAreNotLeader = translationValue(
         path = "clan.you_are_not_leader",
         default = "${Colors.negative}Вы не лидер клана"
     )
 
-    val flagChanged = translationValue(
+    private val flagChanged = translationValue(
         path = "clan.flag_changed",
         default = "${Colors.positive}Флаг %flag% изменен на %value%"
     )
+
+    fun flagChanged(flagName: String, value: Boolean) =
+        flagChanged.replace("%flag%", flagName).replace("%value%", "$value")
+
     val chunkAlreadyClaimed = translationValue(
         path = "clan.chunk_already_claimed",
         default = "${Colors.negative}Этот чанк уже занят"

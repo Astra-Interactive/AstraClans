@@ -4,7 +4,6 @@ import CommandManager
 import com.astrainteractive.astraclans.domain.DatabaseModule
 import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.datasource.ClanDataSource
-import com.astrainteractive.astraclans.domain.exception.ExceptionHandler
 import com.astrainteractive.astraclans.events.EventHandler
 import com.astrainteractive.astraclans.modules.*
 import com.astrainteractive.astraclans.utils.PapiExpansions
@@ -44,7 +43,6 @@ class AstraClans : JavaPlugin() {
         AstraLibs.rememberPlugin(this)
         Logger.prefix = "AstraTemplate"
 
-        ExceptionHandler.handler = ExceptionHandlerProvider.value
         eventHandler = EventHandler()
         reload()
         DatabaseModule.createDatabase("${AstraLibs.instance.dataFolder}${File.separator}clans.db")

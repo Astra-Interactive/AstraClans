@@ -6,8 +6,9 @@ import com.astrainteractive.astraclans.domain.datasource.PendingInviteDataSource
 import com.astrainteractive.astraclans.domain.dto.ClanMemberDTO
 import com.astrainteractive.astraclans.domain.dto.PendingInviteDTO
 import com.astrainteractive.astraclans.domain.exception.ClanOperationException
+import ru.astrainteractive.astralibs.domain.IUseCase
 
-object InvitePlayerUseCase : UseCase<PendingInviteDTO, InvitePlayerUseCase.Params>() {
+object InvitePlayerUseCase : IUseCase<PendingInviteDTO, InvitePlayerUseCase.Params> {
     class Params(val leaderDTO: ClanMemberDTO, val memberDTO: ClanMemberDTO)
 
     override suspend fun run(params: Params): PendingInviteDTO {

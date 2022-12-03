@@ -17,7 +17,6 @@ java {
 }
 repositories {
     mavenCentral()
-    astraLibs(project)
 }
 
 dependencies {
