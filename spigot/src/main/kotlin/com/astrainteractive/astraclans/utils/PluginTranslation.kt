@@ -39,6 +39,10 @@ class PluginTranslation : BaseTranslation() {
         path = "general.not_invited",
         default = "${Colors.negative}Вы не приглашены"
     )
+    val wrongUsage = translationValue(
+        path = "general.wrong_usage",
+        default = "${Colors.negative}Неверное использование команлы"
+    )
     private val joinedClan = translationValue(
         path = "general.joined_clan",
         default = "${Colors.positive}Вы вступили в клан %clan%"
@@ -140,6 +144,10 @@ class PluginTranslation : BaseTranslation() {
     val chunkClaimSuccess = translationValue(
         path = "clan.chunk_claim_success",
         default = "${Colors.positive}Земли захвачены"
+    )
+    val clanRenameSuccess = translationValue(
+        path = "clan.clan_rename_success",
+        default = "${Colors.positive}Клан успешно переименован"
     )
     val noFlagProvided = translationValue(
         path = "clan.no_flag_provided",

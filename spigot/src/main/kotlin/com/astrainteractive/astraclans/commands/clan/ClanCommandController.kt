@@ -48,6 +48,14 @@ object ClanCommandController {
         player.sendTranslationMessage { successClanCreate(clanTag ?: "-") }
     }
 
+    // aclan rename
+    suspend fun clanRename(player: Player,name:String) = ClanExceptionHandler.handle{
+        ClanRenameUseCase.Param(player.toDTO(),name).run {
+            val params = this
+            ClanRenameUseCase(params)
+        }
+        player.sendTranslationMessage { clanRenameSuccess }
+    }
     // aclan claim
     suspend fun clanClaim(player: Player) = ClanExceptionHandler.handle {
         val result = ClaimChunkUseCase.Params(player.toDTO(), player.chunk.toDTO()).run {

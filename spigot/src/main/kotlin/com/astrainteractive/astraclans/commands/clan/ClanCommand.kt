@@ -1,16 +1,20 @@
 package com.astrainteractive.astraclans.commands.clan
 
 import CommandManager
+import com.astrainteractive.astraclans.domain.api.AstraClansAPI
 import com.astrainteractive.astraclans.domain.dto.FlagsEnum
 import com.astrainteractive.astraclans.gui.flags.FlagInventory
 import com.astrainteractive.astraclans.utils.AstraPermission
+import com.astrainteractive.astraclans.utils.isSame
 import com.astrainteractive.astraclans.utils.sendTranslationMessage
+import com.astrainteractive.astraclans.utils.toMemberDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.astralibs.AstraLibs
 import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.utils.HEX
 import ru.astrainteractive.astralibs.utils.registerCommand
 import ru.astrainteractive.astralibs.utils.valueOfOrNull
 
@@ -67,6 +71,15 @@ fun CommandManager.ClanCommand(
             PluginScope.launch { clanCommandController.clanClaim(player = sender) }
         }
 
+        "rename" -> {
+            val newName = args.toList().subList(1, args.size).joinToString(" ")
+            if (newName.isBlank()) {
+                sender.sendTranslationMessage { wrongUsage }
+                return@registerCommand
+            }
+            PluginScope.launch { clanCommandController.clanRename(player = sender, newName) }
+        }
+
         // aclan flag <flag> <bool>
         "flag" -> {
             val flag = valueOfOrNull<FlagsEnum>(args.getOrNull(1) ?: "")
@@ -77,6 +90,36 @@ fun CommandManager.ClanCommand(
         "flags" -> {
             PluginScope.launch(Dispatchers.IO) { FlagInventory(sender).open() }
         }
+
+        "region" -> {
+
+            PluginScope.launch(Dispatchers.IO){
+                val clan = AstraClansAPI.getPlayerClan(sender.toMemberDTO()) ?: run {
+                    sender.sendTranslationMessage { notClanMember }
+                    return@launch
+                }
+                val centerChunk = sender.location.chunk
+                val xSize = 7
+                val ySize = 7
+                val chunkArray = Array(xSize) { i ->
+                    Array(ySize) { j ->
+                        val x = centerChunk.x - (xSize/2) + i
+                        val y = centerChunk.z - (ySize/2) + j
+                        val chunk = sender.location.world.getChunkAt(x, y)
+                        clan.clanLands.firstOrNull { it.isSame(chunk) } != null
+                    }
+                }
+                val chunkArrayString = chunkArray.joinToString("\n") {
+                    it.joinToString("") {
+                        if (it) "#03fc77■".HEX() else "#fc0303■".HEX()
+                    }
+                }.HEX()
+
+                sender.sendMessage("----------------------")
+                sender.sendMessage(chunkArrayString)
+            }
+        }
     }
 }
+
 
