@@ -7,7 +7,6 @@ import ru.astrainteractive.astralibs.di.IReloadable
 
 object ConfigProvider : IReloadable<PluginConfig>() {
     override fun initializer(): PluginConfig {
-        println(EmpireSerializer.toClass<PluginConfig>(Files.configFile))
         return EmpireSerializer.toClass<PluginConfig>(Files.configFile) ?: throw Exception("Could not load config")
     }
 }

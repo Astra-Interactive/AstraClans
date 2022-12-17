@@ -19,7 +19,6 @@ object ClanCommandController {
     private val clanCreateUseCase by ClanCreateUseCaseModule
 
 
-
     //aclan leave
     suspend fun leave(sender: Player) = ClanExceptionHandler.handle {
         val clanDTO = ClanLeaveUseCase.Param(sender.toDTO()).run {
@@ -49,13 +48,14 @@ object ClanCommandController {
     }
 
     // aclan rename
-    suspend fun clanRename(player: Player,name:String) = ClanExceptionHandler.handle{
-        ClanRenameUseCase.Param(player.toDTO(),name).run {
+    suspend fun clanRename(player: Player, name: String) = ClanExceptionHandler.handle {
+        ClanRenameUseCase.Param(player.toDTO(), name).run {
             val params = this
             ClanRenameUseCase(params)
         }
         player.sendTranslationMessage { clanRenameSuccess }
     }
+
     // aclan claim
     suspend fun clanClaim(player: Player) = ClanExceptionHandler.handle {
         val result = ClaimChunkUseCase.Params(player.toDTO(), player.chunk.toDTO()).run {
@@ -77,14 +77,14 @@ object ClanCommandController {
             val params = this
             InvitePlayerUseCase(params)
         }
-        sender.sendTranslationMessage{ playerInvited(player.name) }
+        sender.sendTranslationMessage { playerInvited(player.name) }
     }
 
 
     // aclan join <tag>
     suspend fun join(sender: Player, clan: String?) = ClanExceptionHandler.handle {
         clan ?: run {
-            sender.sendTranslationMessage{ clanNotFound(clan ?: "-") }
+            sender.sendTranslationMessage { clanNotFound(clan ?: "-") }
             return@handle
         }
         val memberDTO = sender.toMemberDTO()
@@ -103,11 +103,16 @@ object ClanCommandController {
             return null
         }
 
+        if (flag == FlagsEnum.PVP && !player.isOp) {
+            player.sendTranslationMessage { adminFlag }
+            return null
+        }
+
         val result = SetClanFlagUseCase.Params(player.toDTO(), flag.toDTO(value)).run {
             val params = this
             SetClanFlagUseCase(params)
         }
-        player.sendTranslationMessage { flagChanged(flag.name,value) }
+        player.sendTranslationMessage { flagChanged(flag.name, value) }
         return result
     }
 }

@@ -138,6 +138,9 @@ fun FlagsEnum.toItemStack(enabled: Boolean): ItemStack {
         HANGING_BREAK_DENY -> ItemStack(Material.GLOW_ITEM_FRAME).withMeta {
             setDisplayName(translation.flagHangingBreak)
         }
+        PVP -> ItemStack(Material.DIAMOND_SWORD).withMeta {
+            setDisplayName(translation.flagPVP)
+        }
     }.withMeta {
         lore = listOf(
             translation.flagIsEnabled + if (enabled) translation.flagTrue else translation.flagFalse

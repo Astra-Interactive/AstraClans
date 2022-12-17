@@ -38,7 +38,6 @@ class ClanCreateUseCase(
         if (config.economy.clanCreatePurchaseAmount>0) {
             val playerUUID = UUID.fromString(player.minecraftUUID)
             val playerBalance = economyProvider?.getBalance(playerUUID) ?: 0.0
-            println("Balance: $playerBalance; required: ${config.economy.clanCreatePurchaseAmount}")
             if (playerBalance < config.economy.clanCreatePurchaseAmount)
                 throw ClanOperationException.NotEnoughMoney(player)
             val takeMoneyResult =

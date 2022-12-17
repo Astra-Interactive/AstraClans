@@ -17,4 +17,5 @@ enum class FlagsEnum {
     BUCKET_FILL_DENY,
     HANGING_PLACE_DENY,
     HANGING_BREAK_DENY,
+    PVP
 }

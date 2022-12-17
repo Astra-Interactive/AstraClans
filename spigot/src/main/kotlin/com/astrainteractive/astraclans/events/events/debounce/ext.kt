@@ -5,6 +5,7 @@ import com.astrainteractive.astraclans.utils.toDTO
 import org.bukkit.entity.Player
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.EntityInteractEvent
 import org.bukkit.event.hanging.HangingBreakEvent
@@ -122,4 +123,11 @@ fun BlockExplodeEvent.toRetractKey() = this.blockList()
             flag = FlagsEnum.HANGING_PLACE_DENY
         )
     }
+
+
+fun EntityDamageByEntityEvent.toRetractKey(player: Player) = PlayerRetractKey(
+    player = player.toDTO(),
+    chunk = player.location.chunk.toDTO(),
+    flag = FlagsEnum.PVP
+)
 

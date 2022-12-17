@@ -153,6 +153,10 @@ class PluginTranslation : BaseTranslation() {
         path = "clan.no_flag_provided",
         default = "${Colors.negative}Введите флаг"
     )
+    val adminFlag = translationValue(
+        path = "clan.admin_flag",
+        default = "${Colors.negative}Этот флаг может исопльзовать только администрация"
+    )
     val previous = translationValue(
         path = "gui.back",
         default = "${Colors.default}Раньше"
@@ -246,6 +250,10 @@ class PluginTranslation : BaseTranslation() {
     val flagHangingBreak = translationValue(
         path = "clan.flag.hanging_break",
         default = "${Colors.default}Запрет снимания повешенных объектов"
+    )
+    val flagPVP = translationValue(
+        path = "clan.flag.pvp",
+        default = "${Colors.default}Запрет PVP"
     )
 
 }

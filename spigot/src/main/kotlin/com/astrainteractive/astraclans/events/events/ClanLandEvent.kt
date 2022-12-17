@@ -166,7 +166,8 @@ class ClanLandEvent {
 
     val onPlayerInteractEntity = DSLEvent.event(PlayerInteractEntityEvent::class.java) {
     }
-    val onEntityDamage = DSLEvent.event(EntityDamageEvent::class.java) {
+    val onEntityDamage = DSLEvent.event(EntityDamageByEntityEvent::class.java) {
+        playerRetractEvent(it.toRetractKey(it.damager as? Player?:return@event), it)
     }
     val onEntityCombust = DSLEvent.event(EntityCombustEvent::class.java) {
     }
