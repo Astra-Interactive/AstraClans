@@ -1,5 +1,7 @@
 # AstraClans
-# What is AstraClans [WIP]
+# What is AstraClans [ABANDONED]
+
+⚠️ The project is abandoned. This was an experiment to create clans plugin with Land management. I don't have time for plugin on such a gigantic scale
 
 This plugin allows players to create clans and manage it's territories
  
