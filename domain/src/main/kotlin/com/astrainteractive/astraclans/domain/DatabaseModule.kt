@@ -8,7 +8,6 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.io.File
 import java.sql.Connection
 
 object DatabaseModule {
@@ -42,5 +41,8 @@ object DatabaseModule {
     ) {
         database = databaseBuilder(path)
 //        return database!!
+    }
+    fun close(){
+        database?.connector?.let { it() }?.close()
     }
 }

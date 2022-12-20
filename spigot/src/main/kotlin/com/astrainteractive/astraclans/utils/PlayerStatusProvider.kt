@@ -13,8 +13,6 @@ object PlayerStatusProvider : IPlayerStatusProvider {
 
     override fun isAnyMemberOnline(clanDTO: ClanDTO): Boolean {
         val isMemberOnline = clanDTO.clanMember.any(::isPlayerOnline)
-        val isLeaderOp = Bukkit.getPlayer(clanDTO.leaderUUID)?.isOp ?: false
-        if (isLeaderOp) return false
         val isLeaderOnline = isPlayerOnline(
             ClanMemberDTO(
                 clanID = clanDTO.id,

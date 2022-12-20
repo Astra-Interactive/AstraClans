@@ -95,6 +95,8 @@ class ClanLandEvent {
 
     val onPlayerInteract = DSLEvent.event(PlayerInteractEvent::class.java) {
         val block = it.clickedBlock ?: return@event
+        if (block.isSolid) return@event
+        if (block.isBuildable) return@event
         playerRetractEvent(it.toRetractKey(FlagsEnum.BLOCK_INTERACT_DENY), it)
     }
 
